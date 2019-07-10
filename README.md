@@ -38,7 +38,7 @@ MODS version 3.6 is the base format of all metadata returned by the LibraryCloud
 There are six sources of descriptive metadata records in LibraryCloud:
 
 | Source Name | Source Code | Number of Records | Source Format | Transformation to MODS |
-|---|---|---:|---|---|
+|:---|:---|:---|:---|:---|
 | Alma | MH:ALMA | >15,000,000 | MARCXML | A [lightly customized version](https://github.com/harvard-library/librarycloud_ingest/blob/release/1.5.0/src/main/resources/MARC21slim2MODS3-6.xsl) of the Library of Congress MARC-to-MODS stylesheet MARC21slim2MODS3-6.xsl. |
 | ArchivesSpace | MH:OASIS | >2,300,000 | Encoded Archival Description (EAD) | EAD files are converted to individual MODS records for each [archival component](https://github.com/harvard-library/librarycloud_ingest/blob/release/1.5.0/src/main/resources/eadcomponent2mods.xsl). |
 | JSTOR Forum | MH:VIA | >7,000,000 | VIA XML | JSTOR Forum’s SSIO XML is first converted to Harvard’s legacy [VIA format](http://hul.harvard.edu/ois/xml/xsd/via/newvia.xsd), and then [from VIA to MODS](https://github.com/harvard-library/librarycloud_ingest/blob/release/1.5.0/src/main/resources/viacomponent2mods.xsl). Individual MODS records are created for each JSTOR Forum image record, whether or not the image has been digitized. |
@@ -90,7 +90,7 @@ Records from JSTOR Forum and from ArchivesSpace both take advantage of this hier
 The `type` and `displayLabel` attributes in the `relatedItem` element indicate the kind of relationship:
 
 | Element | Relationship |
-| --- | --- |
+|:--- |:---|
 | `<relatedItem type="host">` | A larger context of which the described resource is a part. |
 | `<relatedItem type="host" displayLabel="collection">` | The largest unit –the collection—of which the resource is a part. |
 | `<relatedItem type="constituent">` | An item which is part of or representative of the primary object of description. |
@@ -100,7 +100,7 @@ Records for archival components from ArchivesSpace start with the description of
 For example, note the nested uses of `relatedItem` in [this record](https://api.lib.harvard.edu/v2/items?recordIdentifier=hou01365c02879).
 
 | Element | Relationship |
-| --- | --- |
+|:---|:---|
 | Record |  |
 | __Sub-Series |	`<relatedItem type=”host”>` |
 | ____Series | `<relatedItem type=”host”>` |
