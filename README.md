@@ -32,6 +32,8 @@ The records undergo other transformations, normalizations, and enrichments to im
 
 Note that LibraryCloud is not the database of record for this metadata. The metadata in LibraryCloud is neither definitive nor exhaustive. Additional metadata and more specifically-defined metadata can be found in the source systems that provide metadata to LibraryCloud.
 
+![librarycloud diagram](images/librarycloud.png)
+
 ## MODS (Metadata Object Description Schema)
 MODS version 3.6 is the base format of all metadata returned by the LibraryCloud Item API. The [documentation](https://www.loc.gov/standards/mods/mods-outline-3-6.html) of the MODS standard is comprehensive; therefore, Harvard’s profile will focus on implementation-specific and source-specific aspects of the metadata in LibraryCloud.
 
@@ -212,7 +214,7 @@ Records from JSTOR Forum, in contrast, start with the broader description of a p
 Here is an [example record](https://api.lib.harvard.edu/v2/items?recordIdentifier=W209586_urn-3:VIT.BB:25445424):
 
 | Element | Relationship |
-| --- | --- |
+|:---|:---|
 | Painting |  |
 | __X-Ray (detail) | `<relatedItem type=”constituent”>` |
 
@@ -874,7 +876,7 @@ The elements may occur together in one librarycloud wrapper element in a single 
 There is no date in LibraryCloud to represent the first date that a record was loaded. |
 | Example | `<librarycloud:processingDate>2019-04-16T05:49Z</librarycloud:processingDate>` |
 
-## set Extension 
+### set Extension 
 The set extension identifies curated collections in which the item is included, specifically collections created and maintained through Harvard’s Collection Builder service.
 
 These sets may be available for OAI-PMH harvesting. See this [link](https://wiki.harvard.edu/confluence/display/LibraryStaffDoc/LibraryCloud+OAI-PMH+Data+Provider).
@@ -1023,3 +1025,9 @@ MH:ALMA:
   `
 </li>
 </ol>
+
+## Appendix 3: Archival & JSTOR Diagrams
+
+![archival diagram](images/archival.png)
+
+![JSTOR diagram](images/jstor.png)
