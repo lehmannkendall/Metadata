@@ -854,7 +854,7 @@ The elements may occur together in one librarycloud wrapper element in a single 
 | Element | `recordIdentifier` |
 |:---|:---|
 | Description | Contains a single superseded identifier for the record, such as the identifier from a previous generation of cataloging system. |
-| Attributes | source <code>&#124; &#124;</code> MH:ALEPH |
+| Attributes | source <code>&#124;&#124;</code> MH:ALEPH |
 | Content | |
 | Obligation | Required when parent is present |
 | Repeatable | Yes |
