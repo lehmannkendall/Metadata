@@ -15,7 +15,39 @@ _Draft, rev. 2019-06-28_
 
 * [Overview](#Overview)
   * [Description](#Description)
-  * [Sources and Transformations](#Sources)
+  * [Sources and Transformations](#Sources-and-Transformations)
+* [Essential Features](#Essential-Features)
+  * [Record Splitting](#Record-Splitting)
+    * [Alma](#Alma)
+    * [JSTOR Forum](#JSTOR-Forum)
+    * [ArchivesSpace](#ArchivesSpace)
+  * [Heirarchical Description](#Heirarchical-Description)
+  * [Non-Latin Script Metadata](#Non-Latin-Script-Metadata)
+* [Profile by MODS Top-Level Element](#Profile-by-MODS-Top-Level-Element)
+  * [titleInfo](#titleInfo)
+  * [name](#name)
+  * [typeOfResource](#typeOfResource)
+  * [genre](#genre)
+  * [originInfo](#originInfo)
+    * [place](#place)
+    * [Date Elements](#Date-Elements)
+  * [language](#language)
+  * [location](#location)
+    * [physicalLocation](#physicalLocation)
+    * [url](#url)
+  * [physicalDescription](#physicalDescription)
+  * [abstract](#abstract)
+  * [tableOfContents](#tableOfContents)
+  * [targetAudience](#targetAudience)
+  * [part](#part)
+  * [note](#note)
+  * [subject](#subject)
+  * [classification](#classification)
+  * [relatedItem](#relatedItem)
+  * [accessCondition](#accessCondition)
+  * [extension](#extension)
+  * [recordInfo](#recordInfo)
+* [Appendix 1: Mods Extensions](#Appendix-1:-Mods-Extensions)
 
 
 
@@ -203,8 +235,8 @@ The `genre` element is present in many Alma records, nearly all JSTOR Forum reco
 
 It is not present in ArchivesSpace records, Iranian Oral History, or Milman Parry records.
 
-### originalInfo
-The `originalInfo` element is a wrapper for information about the creation or issuance of the resource.
+### originInfo
+The `originInfo` element is a wrapper for information about the creation or issuance of the resource.
 
 | Subelement | May occur in records from |
 |:---|:---|
