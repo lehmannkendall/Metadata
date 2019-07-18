@@ -15,7 +15,7 @@ _Draft, rev. 2019-06-28_
 
 * [Overview](#Overview)
   * [Description](#Description)
-  * [Sources and Transformations](#Sources_and_Transformations)
+  * [Sources and Transformations](#Sources)
 
 
 
