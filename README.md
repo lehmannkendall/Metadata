@@ -472,8 +472,8 @@ The `DRSMetadata` extension includes a subset of administrative and technical me
 
 #### inDRS
 
-| Description | A flag indicating that there is digital content in the DRS associated with this record. |
 |:---|:---|
+| Description | A flag indicating that there is digital content in the DRS associated with this record. |
 | Attributes | None |
 | Content | True |
 | Obligation | Required |
