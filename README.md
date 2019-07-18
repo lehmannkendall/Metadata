@@ -13,13 +13,17 @@ _Draft, rev. 2019-06-28_
 
 ## Contents
 
-[Overview](#Overview)
+[TOC]
 
 
 
 ## Overview
 
+### Description
+
 Harvard’s LibraryCloud service provides API access to descriptive metadata for Harvard Library resources. LibraryCloud metadata is openly available to the public. Anyone can use the API to find, gather, and repurpose the metadata. It also is used within Harvard Library applications--for example, by serving metadata to [Harvard Digital Collections](https://library.harvard.edu/digital-collections) and [CURIOSity Digital Collections](https://curiosity.lib.harvard.edu/)--and it underlies sites and services developed throughout the Harvard community. It also supports Harvard’s partnerships with initiatives such as DPLA. As such, the metadata aims to balance internal and external requirements and expectations.
+
+### Sources and Transformations
 
 LibraryCloud aggregates descriptive metadata from a variety of sources, mainly
 
@@ -28,6 +32,19 @@ LibraryCloud aggregates descriptive metadata from a variety of sources, mainly
 - ArchivesSpace, for archival materials
 
 Each source uses different metadata standards and vocabularies appropriate to its scope and function. To facilitate searching across and reusing the disparate metadata aggregated in LibraryCloud, the source metadata is converted into a common format, [MODS](https://www.loc.gov/standards/mods/).
+
+MODS version 3.6 is the base format of all metadata returned by the LibraryCloud Item API. The [documentation](https://www.loc.gov/standards/mods/mods-outline-3-6.html) of the MODS standard is comprehensive; therefore, this profile focuses on implementation-specific and source-specific aspects of the metadata in LibraryCloud.
+
+There are six sources of descriptive metadata records in LibraryCloud:
+
+| Source Name | Source Code | Number of Records | Source Format | Transformation to MODS |
+|:---|:---|:---|:---|:---|
+| Alma | MH:ALMA | >15,000,000 | MARCXML | A [lightly customized version](https://github.com/harvard-library/librarycloud_ingest/blob/release/1.5.0/src/main/resources/MARC21slim2MODS3-6.xsl) of the Library of Congress MARC-to-MODS stylesheet MARC21slim2MODS3-6.xsl. |
+| ArchivesSpace | MH:OASIS | >2,300,000 | Encoded Archival Description (EAD) | EAD files are converted to individual MODS records for each [archival component](https://github.com/harvard-library/librarycloud_ingest/blob/release/1.5.0/src/main/resources/eadcomponent2mods.xsl). |
+| JSTOR Forum | MH:VIA | >7,000,000 | VIA XML | JSTOR Forum’s SSIO XML is first converted to Harvard’s legacy [VIA format](http://hul.harvard.edu/ois/xml/xsd/via/newvia.xsd), and then [from VIA to MODS](https://github.com/harvard-library/librarycloud_ingest/blob/release/1.5.0/src/main/resources/viacomponent2mods.xsl). Individual MODS records are created for each JSTOR Forum image record, whether or not the image has been digitized. |
+| Iranian Oral History Project | MH:IOHP | ~900 | Custom | [Custom](https://github.com/harvard-library/librarycloud_ingest/blob/master/src/main/resources/mpcol2mods.xsl) |
+| Jacques Burkhardt Scientific Drawings | MH:MCZArtwork | ~1,000 | Custom | [Custom](https://github.com/harvard-library/librarycloud_ingest/blob/master/src/main/resources/mcz2mods.xsl) |
+| Milman Parry Collection of Oral Literature | MH:MHPL | ~1,800 | Custom | [Custom](https://github.com/harvard-library/librarycloud_ingest/blob/master/src/main/resources/iohp2mods.xsl) |
 
 The records undergo other transformations, normalizations, and enrichments to improve their interoperability and usefulness in the aggregated environment:
 
@@ -41,19 +58,7 @@ Note that LibraryCloud is not the database of record for this metadata. The meta
 
 ![librarycloud diagram](images/librarycloud.png)
 
-## MODS (Metadata Object Description Schema)
-MODS version 3.6 is the base format of all metadata returned by the LibraryCloud Item API. The [documentation](https://www.loc.gov/standards/mods/mods-outline-3-6.html) of the MODS standard is comprehensive; therefore, Harvard’s profile will focus on implementation-specific and source-specific aspects of the metadata in LibraryCloud.
-
-There are six sources of descriptive metadata records in LibraryCloud:
-
-| Source Name | Source Code | Number of Records | Source Format | Transformation to MODS |
-|:---|:---|:---|:---|:---|
-| Alma | MH:ALMA | >15,000,000 | MARCXML | A [lightly customized version](https://github.com/harvard-library/librarycloud_ingest/blob/release/1.5.0/src/main/resources/MARC21slim2MODS3-6.xsl) of the Library of Congress MARC-to-MODS stylesheet MARC21slim2MODS3-6.xsl. |
-| ArchivesSpace | MH:OASIS | >2,300,000 | Encoded Archival Description (EAD) | EAD files are converted to individual MODS records for each [archival component](https://github.com/harvard-library/librarycloud_ingest/blob/release/1.5.0/src/main/resources/eadcomponent2mods.xsl). |
-| JSTOR Forum | MH:VIA | >7,000,000 | VIA XML | JSTOR Forum’s SSIO XML is first converted to Harvard’s legacy [VIA format](http://hul.harvard.edu/ois/xml/xsd/via/newvia.xsd), and then [from VIA to MODS](https://github.com/harvard-library/librarycloud_ingest/blob/release/1.5.0/src/main/resources/viacomponent2mods.xsl). Individual MODS records are created for each JSTOR Forum image record, whether or not the image has been digitized. |
-| Iranian Oral History Project | MH:IOHP | ~900 | Custom | [Custom](https://github.com/harvard-library/librarycloud_ingest/blob/master/src/main/resources/mpcol2mods.xsl) |
-| Jacques Burkhardt Scientific Drawings | MH:MCZArtwork | ~1,000 | Custom | [Custom](https://github.com/harvard-library/librarycloud_ingest/blob/master/src/main/resources/mcz2mods.xsl) |
-| Milman Parry Collection of Oral Literature | MH:MHPL | ~1,800 | Custom | [Custom](https://github.com/harvard-library/librarycloud_ingest/blob/master/src/main/resources/iohp2mods.xsl) |
+## Essential Features
 
 ## Record Splitting
 <!-- This section is very important; not sure where to put it. -Robin -->
@@ -84,12 +89,9 @@ The MODS `recordIdentifier` for each of the split records will be the component 
 
 > [Example](https://api.lib.harvard.edu/v2/items/hou01365c02879)
 
-## MODS Structure
-<!--This section is the most unformed/problematic. The special topics really are fundamental; the field-by-field profile less so, to my mind at least. But Normally, I discuss the element usage in the element list below, but our use of the relatedItem hierarchy is so fundamental to understanding the metadata that I wanted to highlight it. I’m sure how to do that effectively, though. - Robin -->
-
+## Hierarchical Description
 MODS consists of 20 top-level elements or element wrappers, all of which are optional and repeatable. Top-level elements may have subelements that, taken together within an instance of a top element, represent a single concept.
 
-### Special Topics: Hierarchical Description
 One of the MODS elements, `relatedItem`, allows for great flexibility in the way the description of a resource is structured that has implications for applications that consume the metadata.
 
 All MODS top-level elements are valid within `relatedItem`. `relatedItem` has many uses, but one is crucial to the aggregation of metadata in LibraryCloud: it enables nested, hierarchical whole/part description.
@@ -115,107 +117,6 @@ For example, note the nested uses of `relatedItem` in [this record](https://api.
 | ____Series | `<relatedItem type=”host”>` |
 | ______Collection | `<relatedItem type=”host” displayLabel=”collection”>` |
 
-<!-- ```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<results xmlns="http://api.lib.harvard.edu/v2/item" xmlns:HarvardDRS="http://hul.harvard.edu/ois/xml/ns/HarvardDRS" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:librarycloud="http://hul.harvard.edu/ois/xml/ns/librarycloud" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:sets="http://hul.harvard.edu/ois/xml/ns/sets" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <pagination>
-    <maxPageableSet>100000</maxPageableSet>
-    <numFound>1</numFound>
-    <query>recordIdentifier=hou01365c02879</query>
-    <limit>10</limit>
-    <start>0</start>
-  </pagination>
-  <items>
-    <mods:mods>
-      <mods:titleInfo>
-        <mods:title>Updike, John. Squirrels mating : autograph manuscript and typescripts with autograph manuscript annotations and corrections, 1987.</mods:title>
-      </mods:titleInfo>
-      <mods:originInfo>
-        <mods:dateCreated point="start">1987</mods:dateCreated>
-        <mods:dateCreated point="end">1987</mods:dateCreated>
-        <mods:dateCreated>1987.</mods:dateCreated>
-      </mods:originInfo>
-      <mods:physicalDescription>
-        <mods:extent>1 folders</mods:extent>
-      </mods:physicalDescription>
-      <mods:physicalDescription>
-        <mods:note type="organization">otherlevel</mods:note>
-      </mods:physicalDescription>
-      <mods:identifier>(2705).</mods:identifier>
-      <mods:language>
-        <mods:languageTerm authority="iso639-2b" type="code">und</mods:languageTerm>
-        <mods:languageTerm authority="iso639-2b" type="text">Undefined</mods:languageTerm>
-      </mods:language>
-      <mods:accessCondition>There are no restrictions on physical access to a majority of this material.   A majority of this collection is shelved offsite. Retrieval requires advance notice. Check with Houghton Public Services staff.   Access to items (359) - (387), (780a), (5434), (6889a) and (7392) - (7395) is restricted until 2029 October 1. Consult curatorial staff. No copying including photography of restricted items is allowed.</mods:accessCondition>
-      <mods:relatedItem otherType="HOLLIS for Archival Discovery record">
-        <mods:location>
-          <mods:url>https://id.lib.harvard.edu/ead/c/hou01365c02879/catalog</mods:url>
-        </mods:location>
-      </mods:relatedItem>
-      <mods:recordInfo>
-        <mods:recordChangeDate encoding="iso8601">20190618</mods:recordChangeDate>
-        <mods:recordIdentifier source="MH:OASIS">hou01365c02879</mods:recordIdentifier>
-      </mods:recordInfo>
-      <mods:relatedItem type="host">
-        <mods:titleInfo>
-          <mods:title>F. Poetry</mods:title>
-        </mods:titleInfo>
-        <mods:recordInfo>
-          <mods:recordIdentifier>hou01365c02509</mods:recordIdentifier>
-        </mods:recordInfo>
-        <mods:relatedItem type="host">
-          <mods:titleInfo>
-            <mods:title>I. Compositions</mods:title>
-          </mods:titleInfo>
-          <mods:recordInfo>
-            <mods:recordIdentifier>hou01365c00001</mods:recordIdentifier>
-          </mods:recordInfo>
-          <mods:relatedItem type="host" displayLabel="collection">
-            <mods:location>
-              <mods:physicalLocation valueURI="http://isni.org/isni/0000000121904234" displayLabel="Harvard repository" type="repository">Houghton Library, Harvard University</mods:physicalLocation>
-            </mods:location>
-            <mods:identifier>MS Am 1793</mods:identifier>
-            <mods:titleInfo>
-              <mods:title>John Updike papers</mods:title>
-            </mods:titleInfo>
-            <mods:originInfo>
-              <mods:dateCreated point="start">1940</mods:dateCreated>
-              <mods:dateCreated point="end">2009</mods:dateCreated>
-              <mods:dateCreated>1940-2009</mods:dateCreated>
-            </mods:originInfo>
-            <mods:recordInfo>
-              <mods:recordIdentifier>hou01365</mods:recordIdentifier>
-            </mods:recordInfo>
-            <mods:relatedItem otherType="HOLLIS record">
-              <mods:location>
-                <mods:url>https://id.lib.harvard.edu/alma/990006018390203941/catalog</mods:url>
-              </mods:location>
-            </mods:relatedItem>
-            <mods:relatedItem otherType="Finding Aid">
-              <mods:location>
-                <mods:url>https://id.lib.harvard.edu/ead/hou01365/catalog</mods:url>
-              </mods:location>
-            </mods:relatedItem>
-            <mods:extension>
-              <librarycloud:HarvardRepositories xmlns="http://www.loc.gov/mods/v3">
-                <librarycloud:HarvardRepository>Houghton</librarycloud:HarvardRepository>
-              </librarycloud:HarvardRepositories>
-            </mods:extension>
-          </mods:relatedItem>
-        </mods:relatedItem>
-      </mods:relatedItem>
-      <mods:extension>
-        <librarycloud:librarycloud xmlns="http://www.loc.gov/mods/v3">
-          <librarycloud:originalDocument>https://s3.amazonaws.com/harvard.ead/hou01365.xml</librarycloud:originalDocument>
-          <librarycloud:processingDate>2019-06-18T09:52Z</librarycloud:processingDate>
-        </librarycloud:librarycloud>
-      </mods:extension>
-      <mods:location />
-    </mods:mods>
-  </items>
-</results>
-``` -->
-
 Records from JSTOR Forum, in contrast, start with the broader description of a painting, building, event, etc., and may have 0-2 additional levels of description for a specific view, such as a perspective, a detail, or a verso.
 
 Here is an [example record](https://api.lib.harvard.edu/v2/items?recordIdentifier=W209586_urn-3:VIT.BB:25445424):
@@ -225,152 +126,6 @@ Here is an [example record](https://api.lib.harvard.edu/v2/items?recordIdentifie
 | Painting |  |
 | __X-Ray (detail) | `<relatedItem type=”constituent”>` |
 
-<!-- ```
-<?xml version="1.0" encoding="UTF-8"?>
-<results xmlns="http://api.lib.harvard.edu/v2/item" xmlns:HarvardDRS="http://hul.harvard.edu/ois/xml/ns/HarvardDRS" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:librarycloud="http://hul.harvard.edu/ois/xml/ns/librarycloud" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:sets="http://hul.harvard.edu/ois/xml/ns/sets" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <pagination>
-    <maxPageableSet>100000</maxPageableSet>
-    <numFound>1</numFound>
-    <query>recordIdentifier=W209586_urn-3:VIT.BB:25445424</query>
-    <limit>10</limit>
-    <start>0</start>
-  </pagination>
-  <items>
-    <mods:mods xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd">
-      <mods:titleInfo>
-        <mods:title>Salvator Mundi</mods:title>
-      </mods:titleInfo>
-      <mods:name>
-        <mods:namePart>Antonello da Messina</mods:namePart>
-        <mods:namePart type="date">ca.1430-1479, Italian</mods:namePart>
-        <mods:role>
-          <mods:roleTerm>creator</mods:roleTerm>
-        </mods:role>
-        <mods:role>
-          <mods:roleTerm>artist</mods:roleTerm>
-        </mods:role>
-      </mods:name>
-      <mods:typeOfResource>still image</mods:typeOfResource>
-      <mods:genre>paintings</mods:genre>
-      <mods:originInfo>
-        <mods:dateOther keyDate="yes">1465</mods:dateOther>
-        <mods:dateCreated point="start">1465</mods:dateCreated>
-        <mods:dateCreated point="end">1465</mods:dateCreated>
-        <mods:dateCreated>1465</mods:dateCreated>
-      </mods:originInfo>
-      <mods:physicalDescription>
-        <mods:extent>38.7 x 29.8 cm.</mods:extent>
-      </mods:physicalDescription>
-      <mods:extension>
-        <cdwalite:cultureWrap xmlns:cdwalite="http://www.getty.edu/research/conducting_research/standards/cdwa/cdwalite" xmlns="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/TR/xlink">
-          <cdwalite:culture>Italian</cdwalite:culture>
-        </cdwalite:cultureWrap>
-      </mods:extension>
-      <mods:location>
-        <mods:physicalLocation type="repository">National Gallery (Great Britain), London, England</mods:physicalLocation>
-        <mods:shelfLocator>673</mods:shelfLocator>
-      </mods:location>
-      <mods:relatedItem type="constituent">
-        <mods:titleInfo>
-          <mods:title>X-Ray (detail)</mods:title>
-        </mods:titleInfo>
-        <mods:name>
-          <mods:namePart>Burroughs, Alan</mods:namePart>
-          <mods:namePart type="date">1897-1965, American</mods:namePart>
-          <mods:role>
-            <mods:roleTerm>creator</mods:roleTerm>
-          </mods:role>
-          <mods:role>
-            <mods:roleTerm>photographer</mods:roleTerm>
-          </mods:role>
-        </mods:name>
-        <mods:name>
-          <mods:namePart>National Gallery</mods:namePart>
-          <mods:namePart type="date">British art museum, London, founded 1824</mods:namePart>
-          <mods:role>
-            <mods:roleTerm>associated name</mods:roleTerm>
-          </mods:role>
-        </mods:name>
-        <mods:typeOfResource>still image</mods:typeOfResource>
-        <mods:physicalDescription>
-          <mods:extent>238 x 285 mm</mods:extent>
-        </mods:physicalDescription>
-        <mods:note>Historical: x-ray photo taken by Alan Burroughs, Fogg Art Museum, September 1927. Inscriptions: owner's stamp on verso.</mods:note>
-        <mods:subject>
-          <mods:topic>stamps (marks)</mods:topic>
-        </mods:subject>
-        <mods:extension>
-          <cdwalite:indexingMaterialsTechSet xmlns:cdwalite="http://www.getty.edu/research/conducting_research/standards/cdwa/cdwalite" xmlns="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/TR/xlink">
-            <cdwalite:termMaterialsTech>gelatin silver prints</cdwalite:termMaterialsTech>
-          </cdwalite:indexingMaterialsTechSet>
-        </mods:extension>
-        <mods:classification>V 41 oversize OV 3</mods:classification>
-        <mods:location>
-          <mods:url displayLabel="Full Image" note="unrestricted" access="raw object">https://nrs.harvard.edu/urn-3:VIT.BB:25445424</mods:url>
-          <mods:url displayLabel="Thumbnail" access="preview">https://nrs.harvard.edu/urn-3:VIT.BB:25445424?width=150&amp;height=150&amp;usethumb=y</mods:url>
-        </mods:location>
-        <mods:location>
-          <mods:physicalLocation displayLabel="Harvard repository" type="repository">Biblioteca Berenson, Fototeca, Villa I Tatti - The Harvard University Center for Italian Renaissance Studies</mods:physicalLocation>
-          <mods:shelfLocator>400089_1</mods:shelfLocator>
-        </mods:location>
-        <mods:accessCondition displayLabel="copyright" type="useAndReproduction">Access Restrictions: This copy is furnished for study purposes only. Written authorization must be obtained for all other uses.</mods:accessCondition>
-        <mods:recordInfo>
-          <mods:recordIdentifier>13022620</mods:recordIdentifier>
-        </mods:recordInfo>
-        <mods:extension>
-          <librarycloud:HarvardRepositories xmlns="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/TR/xlink">
-            <librarycloud:HarvardRepository>Biblioteca Berenson</librarycloud:HarvardRepository>
-          </librarycloud:HarvardRepositories>
-        </mods:extension>
-      </mods:relatedItem>
-      <mods:relatedItem otherType="HOLLIS Images record">
-        <mods:location>
-          <mods:url>https://id.lib.harvard.edu/images/olvwork209586/urn-3:VIT.BB:25445424/catalog</mods:url>
-        </mods:location>
-      </mods:relatedItem>
-      <mods:recordInfo>
-        <mods:recordContentSource authority="marcorg">MH</mods:recordContentSource>
-        <mods:recordContentSource authority="marcorg">MH-VIA</mods:recordContentSource>
-        <mods:recordChangeDate encoding="iso8601">20141227</mods:recordChangeDate>
-        <mods:recordIdentifier source="MH:VIA">W209586_urn-3:VIT.BB:25445424</mods:recordIdentifier>
-        <mods:languageOfCataloging>
-          <mods:languageTerm>eng</mods:languageTerm>
-        </mods:languageOfCataloging>
-      </mods:recordInfo>
-      <mods:language>
-        <mods:languageTerm type="code">zxx</mods:languageTerm>
-        <mods:languageTerm type="text">No linguistic content</mods:languageTerm>
-      </mods:language>
-      <mods:extension>
-        <HarvardDRS:DRSMetadata xmlns="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/TR/xlink">
-          <HarvardDRS:inDRS>true</HarvardDRS:inDRS>
-          <HarvardDRS:accessFlag>P</HarvardDRS:accessFlag>
-          <HarvardDRS:contentModel>STILL IMAGE</HarvardDRS:contentModel>
-          <HarvardDRS:uriType>IDS</HarvardDRS:uriType>
-          <HarvardDRS:fileDeliveryURL>https://nrs.harvard.edu/urn-3:VIT.BB:25445424</HarvardDRS:fileDeliveryURL>
-          <HarvardDRS:ownerCode>VIT.BERE</HarvardDRS:ownerCode>
-          <HarvardDRS:ownerCodeDisplayName>Biblioteca Berenson</HarvardDRS:ownerCodeDisplayName>
-          <HarvardDRS:lastModifiedDate>2016-02-18T16:37:48.316Z</HarvardDRS:lastModifiedDate>
-        </HarvardDRS:DRSMetadata>
-      </mods:extension>
-      <mods:extension>
-        <librarycloud:librarycloud xmlns="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/TR/xlink">
-          <librarycloud:availableTo>Everyone</librarycloud:availableTo>
-          <librarycloud:digitalFormats>
-            <librarycloud:digitalFormat>Images</librarycloud:digitalFormat>
-          </librarycloud:digitalFormats>
-          <librarycloud:originalDocument>https://s3.amazonaws.com/via-presto/prod/olvwork209586.xml</librarycloud:originalDocument>
-          <librarycloud:processingDate>2019-06-29T11:51Z</librarycloud:processingDate>
-        </librarycloud:librarycloud>
-      </mods:extension>
-      <mods:location>
-        <mods:url displayLabel="Harvard Digital Collections" access="object in context">https://id.lib.harvard.edu/digital_collections/W209586_urn-3:VIT.BB:25445424</mods:url>
-      </mods:location>
-    </mods:mods>
-  </items>
-</results>
-``` -->
-
 Here is [another example](https://api.lib.harvard.edu/v2/items?recordIdentifier=G80_olvsurrogate307431):
 
 | Element | Relationship |
@@ -379,7 +134,7 @@ Here is [another example](https://api.lib.harvard.edu/v2/items?recordIdentifier=
 | __One Quilt | `<relatedItem type=”constituent”>` |
 | ____Total view of the quilt | `<relatedItem type=”constituent”>` |
 
-### Special Topics: Non-Latin Script Metadata
+## Non-Latin Script Metadata
 Non-Latin script may appear in LibraryCloud records from any source. However, the MODS `altRepGroup` attribute is only used in Alma records to designate paired elements containing corresponding information in transliteration and in vernacular script.
 
 If an `altRepGroup` attribute is present with a value other than “00”, there will be another element with an identical `altRepGroup` value containing a representation of some or all of the element information in a different script (e.g., Arabic).
@@ -413,6 +168,7 @@ Most, but not all, records will include at least one top-level `titleInfo` eleme
 - `type` values: abbreviated, translated, alternative, uniform
 - `otherType` values are not controlled
 - `titleInfo` elements that contain neither `type` nor `otherType` attributes can be considered primary titles
+
 ##### Subelements
 `titleInfo` is a wrapper element
 
