@@ -48,8 +48,14 @@ _Draft, rev. 2019-06-28_
   * [extension](#extension)
   * [recordInfo](#recordInfo)
 * [Appendix 1: Mods Extensions](#Appendix-1-MODS-Extensions)
+  * [cdwalite:cultureWrap](#cdwalite-cultureWrap)
+  * [cdwalite:indexingMaterialsTechSet](#cdwalite-indexingMaterialsTechSet)
+  * [cdwalite:styleWrap](#cdwalite-styleWrap)
+  * [DRSMetadata](#DRSMetadata)
+    * [inDRS](#inDRS)
+    * [accessFlag](#accessFlag)
+    * [contentModel](#contentModel)
 * [Appendix 2: relatedItem Examples](#Appendix-2-relatedItem-Examples)
-
 
 ## Overview
 
@@ -468,33 +474,36 @@ Example:
 ### DRSMetadata
 The `DRSMetadata` extension includes a subset of administrative and technical metadata copied from the Harvard Digital Repository Service (DRS) to facilitate discovery and use of digital content available from the DRS.
 
-<!-- Add table block for DRSMetadata wrapper -->
+
+| Element | Attributes | Content | Obligation | Repeatable | Contained In |
+|---|---|---|---|---|---|
+| `inDRS` | None | True | Required | No | //HarvardDRS:DRSMetadata |
+| `accessFlag` | None | Controlled values: `P` (public), `R` (restricted)  | Required | No | //HarvardDRS:DRSMetadata |
+|  |  |  |  |  |  |
+|  |  |  |  |  |  |
+|  |  |  |  |  |  |
+
+<!-- Add DRSMetadata wrapper -->
 
 #### inDRS
 A flag indicating that there is digital content in the DRS associated with this record.
 
-| Element | Application |
-|:---|:---|
-| Attributes | None |
-| Content | True |
-| Obligation | Required |
-| Repeatable | No |
-| Contained In | //HarvardDRS:DRSMetadata |
-| Note | The element exists to facilitate searching and faceting. Only `inDRS="true"` is explicit in the metadata. Any record lacking a DRSMetadata extension will be recorded as `inDRS=“false”` in the LibraryCloud Item API, and there will be no DRSMetadata extension in the record. |
-| Example | `<HarvardDRS:inDRS>true</HarvardDRS:inDRS>` |
+Example
+```xml
+<HarvardDRS:inDRS>true</HarvardDRS:inDRS>
+```
+
+Note: The element exists to facilitate searching and faceting. Only `inDRS="true"` is explicit in the metadata. Any record lacking a DRSMetadata extension will be recorded as `inDRS=“false”` in the LibraryCloud Item API, and there will be no DRSMetadata extension in the record.
 
 #### accessFlag
 A code indicating whether the DRS digital content is accessible to the public or is restricted to Harvard affiliates.
 
-| Element | Application |
-|:---|:---|
-| Attributes | None |
-| Content | Controlled values: `P` (public),`R` (restricted) |
-| Obligation | Required |
-| Repeatable | No |
-| Contained In | //HarvardDRS:DRSMetadata |
-| Note | The value applies to a file in the DRS if the URN in the LibraryCloud record resolves to a specific file.  If the URN resolves to a multifile object, the accessFlag will be the least restrictive accessFlag value associated with any deliverable file in the object.  |
-| Example | `<HarvardDRS:accessFlag>P</HarvardDRS:accessFlag>` |
+Example
+```xml
+<HarvardDRS:accessFlag>P</HarvardDRS:accessFlag>
+```
+
+Note: The value applies to a file in the DRS if the URN in the LibraryCloud record resolves to a specific file.  If the URN resolves to a multifile object, the `accessFlag` will be the least restrictive `accessFlag` value associated with any deliverable file in the object.
 
 #### contentModel
 
