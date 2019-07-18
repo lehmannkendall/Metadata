@@ -10,6 +10,13 @@ GitHub's version of Markdown is [GitHub Flavord Markdown (GFM)](https://github.g
 # MODS Application Profile for LibraryCloud
 _Draft, rev. 2019-06-28_
 
+
+## Contents
+
+[Overview](#Overview)
+
+
+
 ## Overview
 
 Harvard’s LibraryCloud service provides API access to descriptive metadata for Harvard Library resources. LibraryCloud metadata is openly available to the public. Anyone can use the API to find, gather, and repurpose the metadata. It also is used within Harvard Library applications--for example, by serving metadata to [Harvard Digital Collections](https://library.harvard.edu/digital-collections) and [CURIOSity Digital Collections](https://curiosity.lib.harvard.edu/)--and it underlies sites and services developed throughout the Harvard community. It also supports Harvard’s partnerships with initiatives such as DPLA. As such, the metadata aims to balance internal and external requirements and expectations.
@@ -664,7 +671,7 @@ Example:
 </mods:extension>
 ```
 
-### DRSMetadata 
+### DRSMetadata
 The DRSMetadata extension includes a subset of administrative and technical metadata copied from the Harvard Digital Repository Service (DRS) to facilitate discovery and use of digital content available from the DRS.
 
 <!-- Add table block for DRSMetadata wrapper -->
@@ -673,12 +680,12 @@ The DRSMetadata extension includes a subset of administrative and technical meta
 |:---|:---|
 | Description | A flag indicating that there is digital content in the DRS associated with this record. |
 | Attributes | None |
-| Content | True | 
+| Content | True |
 | Obligation | Required |
 | Repeatable | No |
 | Contained In | //HarvardDRS:DRSMetadata |
 | Note | The element exists to facilitate searching and faceting. Only `inDRS="true"` is explicit in the metadata. Any record lacking a DRSMetadata extension will be recorded as `inDRS=“false”` in the LibraryCloud Item API, and there will be no DRSMetadata extension in the record. |
-| Example | `<HarvardDRS:inDRS>true</HarvardDRS:inDRS> ` | 
+| Example | `<HarvardDRS:inDRS>true</HarvardDRS:inDRS> ` |
 
 | Element | `accessFlag` |
 |:---|:---|
@@ -689,7 +696,7 @@ The DRSMetadata extension includes a subset of administrative and technical meta
 | Repeatable | No |
 | Contained In | //HarvardDRS:DRSMetadata |
 | Note | The value applies to a file in the DRS if the URN in the LibraryCloud record resolves to a specific file.  If the URN resolves to a multifile object, the accessFlag will be the least restrictive accessFlag value associated with any deliverable file in the object.  |
-| Example | `<HarvardDRS:accessFlag>P</HarvardDRS:accessFlag>` | 
+| Example | `<HarvardDRS:accessFlag>P</HarvardDRS:accessFlag>` |
 
 | Element | `contentModel` |
 |:---|:---|
@@ -700,7 +707,7 @@ The DRSMetadata extension includes a subset of administrative and technical meta
 | Repeatable | No |
 | Contained In | //HarvardDRS:DRSMetadata |
 | Note | |
-| Example | `<HarvardDRS:contentModel>P</HarvardDRS:contentModel>` | 
+| Example | `<HarvardDRS:contentModel>P</HarvardDRS:contentModel>` |
 
 | Element | `uriType` |
 |:---|:---|
@@ -711,7 +718,7 @@ The DRSMetadata extension includes a subset of administrative and technical meta
 | Repeatable | No |
 | Contained In | //HarvardDRS:DRSMetadata |
 | Note | Delivery service types: FDS (text documents), IDS (images), PDS (page-turned objects), PDS_LIST (list of page-turned objects), SDS (streaming audio), (SDS_VIDEO (streaming video) |
-| Example | `<HarvardDRS:uriType>P</HarvardDRS:uriType>` | 
+| Example | `<HarvardDRS:uriType>P</HarvardDRS:uriType>` |
 
 | Element | `fileDeliveryUrl` |
 |:---|:---|
@@ -722,7 +729,7 @@ The DRSMetadata extension includes a subset of administrative and technical meta
 | Repeatable | No |
 | Contained In | //HarvardDRS:DRSMetadata |
 | Note | This URL serves to associate a URL in descriptive record with its corresponding DRS metadata. Despite its name, it does not necessarily correspond to a delivered file. Most often it delivers content in a dedicated viewer or rendering application. |
-| Example | `<HarvardDRS:fileDeliveryURL>https://nrs.harvard.edu/urn-3:FHCL:2789166</HarvardDRS:fileDeliveryURL>` | 
+| Example | `<HarvardDRS:fileDeliveryURL>https://nrs.harvard.edu/urn-3:FHCL:2789166</HarvardDRS:fileDeliveryURL>` |
 
 | Element | `ownerCode` |
 |:---|:---|
@@ -733,7 +740,7 @@ The DRSMetadata extension includes a subset of administrative and technical meta
 | Repeatable | No |
 | Contained In | //HarvardDRS:DRSMetadata |
 | Note | This value is expanded into the human-readable text form of the unit name in the ownerCodeDisplayName element. |
-| Example | `<HarvardDRS:ownerCode>FHCL.HOUGH</HarvardDRS:ownerCode>` | 
+| Example | `<HarvardDRS:ownerCode>FHCL.HOUGH</HarvardDRS:ownerCode>` |
 
 | Element | `ownerCodeDisplayName` |
 |:---|:---|
@@ -744,7 +751,7 @@ The DRSMetadata extension includes a subset of administrative and technical meta
 | Repeatable | No |
 | Contained In | //HarvardDRS:DRSMetadata |
 | Note | This value corresponds to the code for the unit name in the ownerCode element. |
-| Example | `<HarvardDRS:ownerCodeDisplayName>Houghton Library</HarvardDRS:ownerCodeDisplayName>` | 
+| Example | `<HarvardDRS:ownerCodeDisplayName>Houghton Library</HarvardDRS:ownerCodeDisplayName>` |
 
 | Element | `metsLabel` |
 |:---|:---|
@@ -755,7 +762,7 @@ The DRSMetadata extension includes a subset of administrative and technical meta
 | Repeatable | No |
 | Contained In | //HarvardDRS:DRSMetadata |
 | Note | |
-| Example | `<HarvardDRS:metsLabel> LN 93. Derviš, Zilić. Ide Tito preko Romanije. Stolac, June 9, 1950. Albert B. Lord Collection. Milman Parry Collection of Oral Literature.</HarvardDRS:metsLabel>` | 
+| Example | `<HarvardDRS:metsLabel> LN 93. Derviš, Zilić. Ide Tito preko Romanije. Stolac, June 9, 1950. Albert B. Lord Collection. Milman Parry Collection of Oral Literature.</HarvardDRS:metsLabel>` |
 
 | Element | `lastModificationDate` |
 |:---|:---|
@@ -766,10 +773,10 @@ The DRSMetadata extension includes a subset of administrative and technical meta
 | Repeatable | No |
 | Contained In | //HarvardDRS:DRSMetadata |
 | Note | |
-| Example | `<HarvardDRS:lastModifiedDate>2015-11-02T15:06:39.404Z</HarvardDRS:lastModifiedDate>` | 
+| Example | `<HarvardDRS:lastModifiedDate>2015-11-02T15:06:39.404Z</HarvardDRS:lastModifiedDate>` |
 
-### librarycloud Extension 
-The librarycloud extension provides alternative, normalized, or user-friendly values to improve searching, faceting, or display, as well as auxiliary and administrative information. 
+### librarycloud Extension
+The librarycloud extension provides alternative, normalized, or user-friendly values to improve searching, faceting, or display, as well as auxiliary and administrative information.
 
 The elements may occur together in one librarycloud wrapper element in a single mods:extension or split across more than one mods:extension, and they may occur at any level of the hierarchy.
 
@@ -784,7 +791,7 @@ The elements may occur together in one librarycloud wrapper element in a single 
 | Repeatable | No |
 | Contained In | //librarycloud:librarycloud |
 | Note | availableTo values are derived from HarvardDRS:accessFlag values. <ul><li>accessFlag<code>&#129130;</code>P Everyone</li><li>accessFlag<code>&#129130;</code>R Harvard only</li></ul>  Two types of content may have inaccurate values: <ol><li>Restricted images that have separate thumbnail images deposited in the DRS will appear as “Everyone”</li><li>Restricted Audio content that is accessed through a DRS playlist appears as “Everyone” because the playlist is public, even if the underlying audio files are not. </li></ol>|
-| Example | `<librarycloud:availableTo>Everyone</librarycloud:availableTo>` | 
+| Example | `<librarycloud:availableTo>Everyone</librarycloud:availableTo>` |
 
 | Element | `DigitalFormats` |
 |:---|:---|
@@ -795,7 +802,7 @@ The elements may occur together in one librarycloud wrapper element in a single 
 | Repeatable | No |
 | Contained In | //librarycloud:librarycloud |
 | Note | Most LibraryCloud records will contain no more than one |
-| Example | See under DigitalFormat below. | 
+| Example | See under DigitalFormat below. |
 
 | Element | `DigitalFormat` |
 |:---|:---|
@@ -872,11 +879,11 @@ The elements may occur together in one librarycloud wrapper element in a single 
 | Obligation | Required |
 | Repeatable | No |
 | Contained In | //librarycloud:librarycloud |
-| Note | 
+| Note |
 There is no date in LibraryCloud to represent the first date that a record was loaded. |
 | Example | `<librarycloud:processingDate>2019-04-16T05:49Z</librarycloud:processingDate>` |
 
-### set Extension 
+### set Extension
 The set extension identifies curated collections in which the item is included, specifically collections created and maintained through Harvard’s Collection Builder service.
 
 These sets may be available for OAI-PMH harvesting. See this [link](https://wiki.harvard.edu/confluence/display/LibraryStaffDoc/LibraryCloud+OAI-PMH+Data+Provider).
@@ -892,7 +899,7 @@ They may have dedicated exhibit sites, [e.g.](http://curiosity.lib.harvard.edu/w
 | Repeatable | No |
 | Contained In | //mods:extension |
 | Note | |
-| Example | `<sets:sets> <sets:set> <sets:systemId>57217</sets:systemId> <sets:setName>Women Working, 1800-1930</sets:setName> <sets:setSpec>ww</sets:setSpec> <sets:baseUrl> https://id.lib.harvard.edu/curiosity/women-working-1800-1930/45- </sets:baseUrl> </sets:set> </sets:sets>` | 
+| Example | `<sets:sets> <sets:set> <sets:systemId>57217</sets:systemId> <sets:setName>Women Working, 1800-1930</sets:setName> <sets:setSpec>ww</sets:setSpec> <sets:baseUrl> https://id.lib.harvard.edu/curiosity/women-working-1800-1930/45- </sets:baseUrl> </sets:set> </sets:sets>` |
 
 | Element | `set` |
 |:---|:---|
@@ -903,7 +910,7 @@ They may have dedicated exhibit sites, [e.g.](http://curiosity.lib.harvard.edu/w
 | Repeatable | Yes |
 | Contained In | //sets:sets |
 | Note | |
-| Example | See sets, above. | 
+| Example | See sets, above. |
 
 | Element | `systemId` |
 |:---|:---|
@@ -914,7 +921,7 @@ They may have dedicated exhibit sites, [e.g.](http://curiosity.lib.harvard.edu/w
 | Repeatable | No |
 | Contained In | //sets:set |
 | Note | |
-| Example | `<sets:systemId>57218</sets:systemId>` | 
+| Example | `<sets:systemId>57218</sets:systemId>` |
 
 | Element | `setName` |
 |:---|:---|
@@ -925,7 +932,7 @@ They may have dedicated exhibit sites, [e.g.](http://curiosity.lib.harvard.edu/w
 | Repeatable | No |
 | Contained In | //sets:set |
 | Note | This is the same as the setName in [OAI-PMH](http://www.openarchives.org/OAI/openarchivesprotocol.html) |
-| Example | `<sets:setName>Women Working, 1800-1930</sets:setName>` | 
+| Example | `<sets:setName>Women Working, 1800-1930</sets:setName>` |
 
 | Element | `setSpec` |
 |:---|:---|
@@ -936,7 +943,7 @@ They may have dedicated exhibit sites, [e.g.](http://curiosity.lib.harvard.edu/w
 | Repeatable | No |
 | Contained In | //sets:set |
 | Note | This is the same as the setSpec in [OAI-PMH](http://www.openarchives.org/OAI/openarchivesprotocol.html) |
-| Example | `<sets:setName>Women Working, 1800-1930</sets:setName>` | 
+| Example | `<sets:setName>Women Working, 1800-1930</sets:setName>` |
 
 | Element | `baseUrl` |
 |:---|:---|
@@ -947,23 +954,23 @@ They may have dedicated exhibit sites, [e.g.](http://curiosity.lib.harvard.edu/w
 | Repeatable | No |
 | Contained In | //sets:set |
 | Note | baseUrl will only be present if there is a public exhibit or site for the collection. |
-| Example | `<sets:baseUrl> https://id.lib.harvard.edu/curiosity/women-working-1800-1930/45- </sets:baseUrl>` | 
+| Example | `<sets:baseUrl> https://id.lib.harvard.edu/curiosity/women-working-1800-1930/45- </sets:baseUrl>` |
 
 ## Appendix 2: relatedItem examples
 MH:ALMA:
-<ol><li> Permalink to the record in HOLLIS: 
+<ol><li> Permalink to the record in HOLLIS:
 
   `<mods:relatedItem otherType="HOLLIS record">
   <mods:location>
   <mods:url>
-  https://id.lib.harvard.edu/alma/990000000230203941/catalog 
+  https://id.lib.harvard.edu/alma/990000000230203941/catalog
   </mods:url>
   </mods:location>
   `
 </li>
-<li> Unspecified - Link to Finding Aid: 
+<li> Unspecified - Link to Finding Aid:
 
-  ` 
+  `
   <mods:relatedItem>
   <mods:titleInfo>
   <mods:title>Electronic finding aid</mods:title>
@@ -981,7 +988,7 @@ MH:ALMA:
   </mods:titleInfo>
   `
 </li>
-<li> Other format: 
+<li> Other format:
 
   `<mods:relatedItem type="otherFormat" displayLabel="Online version:" otherType="Online version:">
   <mods:titleInfo>
@@ -1011,7 +1018,7 @@ MH:ALMA:
   </mods:titleInfo>
   `
 </li>
-<li> Is Referenced By: 
+<li> Is Referenced By:
 
   `<mods:relatedItem type="isReferencedBy">
   <mods:titleInfo>
