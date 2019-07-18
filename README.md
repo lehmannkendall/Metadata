@@ -471,9 +471,10 @@ The `DRSMetadata` extension includes a subset of administrative and technical me
 <!-- Add table block for DRSMetadata wrapper -->
 
 #### inDRS
+A flag indicating that there is digital content in the DRS associated with this record.
 
+| Element | Application |
 |:---|:---|
-| Description | A flag indicating that there is digital content in the DRS associated with this record. |
 | Attributes | None |
 | Content | True |
 | Obligation | Required |
@@ -483,8 +484,9 @@ The `DRSMetadata` extension includes a subset of administrative and technical me
 | Example | `<HarvardDRS:inDRS>true</HarvardDRS:inDRS>` |
 
 #### accessFlag
+A code indicating whether the DRS digital content is accessible to the public or is restricted to Harvard affiliates.
 
-| Description | A code indicating whether the DRS digital content is accessible to the public or is restricted to Harvard affiliates. |
+| Element | Application |
 |:---|:---|
 | Attributes | None |
 | Content | Controlled values: `P` (public),`R` (restricted) |
@@ -493,6 +495,8 @@ The `DRSMetadata` extension includes a subset of administrative and technical me
 | Contained In | //HarvardDRS:DRSMetadata |
 | Note | The value applies to a file in the DRS if the URN in the LibraryCloud record resolves to a specific file.  If the URN resolves to a multifile object, the accessFlag will be the least restrictive accessFlag value associated with any deliverable file in the object.  |
 | Example | `<HarvardDRS:accessFlag>P</HarvardDRS:accessFlag>` |
+
+#### contentModel
 
 | Element | `contentModel` |
 |:---|:---|
