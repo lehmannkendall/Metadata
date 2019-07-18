@@ -470,9 +470,8 @@ The `DRSMetadata` extension includes a subset of administrative and technical me
 
 <!-- Add table block for DRSMetadata wrapper -->
 
-| Element | `inDRS` |
-|:---|:---|
 | Description | A flag indicating that there is digital content in the DRS associated with this record. |
+|:---|:---|
 | Attributes | None |
 | Content | True |
 | Obligation | Required |
@@ -485,7 +484,7 @@ The `DRSMetadata` extension includes a subset of administrative and technical me
 |:---|:---|
 | Description | A code indicating whether the DRS digital content is accessible to the public or is restricted to Harvard affiliates. |
 | Attributes | None |
-| Content | Controlled values: <ul><li>`P` (public)</li><li>`R` (restricted)</li></ul> |
+| Content | Controlled values: `P` (public),`R` (restricted) |
 | Obligation | Required |
 | Repeatable | No |
 | Contained In | //HarvardDRS:DRSMetadata |
