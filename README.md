@@ -477,10 +477,11 @@ The `DRSMetadata` extension includes a subset of administrative and technical me
 
 | Element | Attributes | Content | Obligation | Repeatable | Contained In |
 |---|---|---|---|---|---|
-| `inDRS` | None | True | Required | No | //HarvardDRS:DRSMetadata |
+| `inDRS` | None | `True` | Required | No | //HarvardDRS:DRSMetadata |
 | `accessFlag` | None | Controlled values: `P` (public), `R` (restricted)  | Required | No | //HarvardDRS:DRSMetadata |
-|  |  |  |  |  |  |
-|  |  |  |  |  |  |
+| `contentModel` | None  |  Controlled values: `STILL IMAGE`, `PDS DOCUMENT`, `DOCUMENT`, `AUDIO`, `TEXT`, `PDS DOCUMENT LIST`, `VIDEO` | Required | No | //HarvardDRS:DRSMetadata |
+| `uriType` | None | Controlled values: `FDS`, `IDS`, `PDS`, `PDS_LIST`, `SDS`, `SDS_VIDEO` | Optional | No | //HarvardDRS:DRSMetadata |
+| `fileDeliveryUrl` | None |  | Required | No | //HarvardDRS:DRSMetadata |
 |  |  |  |  |  |  |
 
 <!-- Add DRSMetadata wrapper -->
@@ -488,7 +489,6 @@ The `DRSMetadata` extension includes a subset of administrative and technical me
 #### inDRS
 A flag indicating that there is digital content in the DRS associated with this record.
 
-Example
 ```xml
 <HarvardDRS:inDRS>true</HarvardDRS:inDRS>
 ```
@@ -498,7 +498,6 @@ Note: The element exists to facilitate searching and faceting. Only `inDRS="true
 #### accessFlag
 A code indicating whether the DRS digital content is accessible to the public or is restricted to Harvard affiliates.
 
-Example
 ```xml
 <HarvardDRS:accessFlag>P</HarvardDRS:accessFlag>
 ```
@@ -507,38 +506,30 @@ Note: The value applies to a file in the DRS if the URN in the LibraryCloud reco
 
 #### contentModel
 
-| Element | `contentModel` |
-|:---|:---|
-| Description | An indication of type and structure of the digital object in the DRS. |
-| Attributes | None |
-| Content | Controlled values: <ul><li>`STILL IMAGE`</li><li>`PDS DOCUMENT`</li><li>`DOCUMENT`</li><li>`AUDIO`</li><li>`TEXT`</li><li>`PDS DOCUMENT LIST`</li><li>`VIDEO`</li></ul> |
-| Obligation | Required |
-| Repeatable | No |
-| Contained In | //HarvardDRS:DRSMetadata |
-| Note | |
-| Example | `<HarvardDRS:contentModel>P</HarvardDRS:contentModel>` |
+An indication of type and structure of the digital object in the DRS.
+```xml
+<HarvardDRS:contentModel>P</HarvardDRS:contentModel>
+```
 
-| Element | `uriType` |
-|:---|:---|
-| Description | A code for the type of service that will be used to deliver the content to the user. |
-| Attributes | None |
-| Content | Controlled values: <ul><li>`FDS`</li><li>`IDS`</li><li>`PDS`</li><li>`PDS_LIST`</li><li>`SDS`</li><li>`SDS_VIDEO`</li></ul> |
-| Obligation | Optional |
-| Repeatable | No |
-| Contained In | //HarvardDRS:DRSMetadata |
-| Note | Delivery service types: FDS (text documents), IDS (images), PDS (page-turned objects), PDS_LIST (list of page-turned objects), SDS (streaming audio), (SDS_VIDEO (streaming video) |
-| Example | `<HarvardDRS:uriType>P</HarvardDRS:uriType>` |
+#### uriType
+A code for the type of service that will be used to deliver the content to the user.
 
-| Element | `fileDeliveryUrl` |
-|:---|:---|
-| Description | The persistent identifier for delivery of the DRS content. |
-| Attributes | None |
-| Content | |
-| Obligation | Required |
-| Repeatable | No |
-| Contained In | //HarvardDRS:DRSMetadata |
-| Note | This URL serves to associate a URL in descriptive record with its corresponding DRS metadata. Despite its name, it does not necessarily correspond to a delivered file. Most often it delivers content in a dedicated viewer or rendering application. |
-| Example | `<HarvardDRS:fileDeliveryURL>https://nrs.harvard.edu/urn-3:FHCL:2789166</HarvardDRS:fileDeliveryURL>` |
+```xml
+<HarvardDRS:uriType>P</HarvardDRS:uriType>
+```
+
+Note: Delivery service types: FDS (text documents), IDS (images), PDS (page-turned objects), PDS_LIST (list of page-turned objects), SDS (streaming audio), SDS_VIDEO (streaming video)
+
+#### fileDeliveryUrl
+The persistent identifier for delivery of the DRS content.
+
+```xml
+<HarvardDRS:fileDeliveryURL>https://nrs.harvard.edu/urn-3:FHCL:2789166</HarvardDRS:fileDeliveryURL>
+```
+
+Note: This URL serves to associate a URL in descriptive record with its corresponding DRS metadata. Despite its name, it does not necessarily correspond to a delivered file. Most often it delivers content in a dedicated viewer or rendering application. |
+
+#### ownerCode
 
 | Element | `ownerCode` |
 |:---|:---|
