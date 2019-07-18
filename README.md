@@ -47,7 +47,7 @@ _Draft, rev. 2019-06-28_
   * [accessCondition](#accessCondition)
   * [extension](#extension)
   * [recordInfo](#recordInfo)
-* [Appendix 1: Mods Extensions](#Appendix-1)
+* [Appendix 1: Mods Extensions](#Appendix-1-MODS-Extensions)
 
 
 
