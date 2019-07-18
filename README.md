@@ -470,18 +470,6 @@ The `DRSMetadata` extension includes a subset of administrative and technical me
 
 <!-- Add table block for DRSMetadata wrapper -->
 
-Proposed unified table:
-
-| Element | Description | Attributes | Content | Obligation | Repeatable | Contained In | Note |
-|---|---|---|---|---|---|---|---|
-| `inDRS` | A flag indicating that there is digital content in the DRS associated with this record. | None | True | Required | No | //HarvardDRS:DRSMetadata | he element exists to facilitate searching and faceting. Only `inDRS="true"` is explicit in the metadata. Any record lacking a DRSMetadata extension will be recorded as `inDRS=“false”` in the LibraryCloud Item API, and there will be no DRSMetadata extension in the record. |
-|  | `<HarvardDRS:inDRS>true</HarvardDRS:inDRS>` |
-|  |  |  |  |  |  |  |  |
-|  |  |  |  |  |  |  |  |
-
-
-Original tables:
-
 | Element | `inDRS` |
 |:---|:---|
 | Description | A flag indicating that there is digital content in the DRS associated with this record. |
