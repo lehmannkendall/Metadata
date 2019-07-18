@@ -48,7 +48,7 @@ _Draft, rev. 2019-06-28_
   * [extension](#extension)
   * [recordInfo](#recordInfo)
 * [Appendix 1: Mods Extensions](#Appendix-1-MODS-Extensions)
-
+* [Appendix 2: relatedItem Examples](#Appendix-2-relatedItem-Examples)
 
 
 ## Overview
@@ -91,6 +91,10 @@ The records undergo other transformations, normalizations, and enrichments to im
 Note that LibraryCloud is not the database of record for this metadata. The metadata in LibraryCloud is neither definitive nor exhaustive. Additional metadata and more specifically-defined metadata can be found in the source systems that provide metadata to LibraryCloud.
 
 ![librarycloud diagram](images/librarycloud.png)
+
+![archival diagram](images/archival.png)
+
+![JSTOR diagram](images/jstor.png)
 
 ## Essential Features
 
@@ -462,9 +466,20 @@ Example:
 ```
 
 ### DRSMetadata
-The DRSMetadata extension includes a subset of administrative and technical metadata copied from the Harvard Digital Repository Service (DRS) to facilitate discovery and use of digital content available from the DRS.
+The `DRSMetadata` extension includes a subset of administrative and technical metadata copied from the Harvard Digital Repository Service (DRS) to facilitate discovery and use of digital content available from the DRS.
 
 <!-- Add table block for DRSMetadata wrapper -->
+
+Proposed unified table:
+| Element | Description | Attributes | Content | Obligation | Repeatable | Contained In | Note |
+|---|---|---|---|---|---|---|---|
+| `inDRS` | A flag indicating that there is digital content in the DRS associated with this record. | None | True | Required | No | //HarvardDRS:DRSMetadata | he element exists to facilitate searching and faceting. Only `inDRS="true"` is explicit in the metadata. Any record lacking a DRSMetadata extension will be recorded as `inDRS=“false”` in the LibraryCloud Item API, and there will be no DRSMetadata extension in the record. |
+|  | `<HarvardDRS:inDRS>true</HarvardDRS:inDRS>` |
+|  |  |  |  |  |  |  |  |
+|  |  |  |  |  |  |  |  |
+
+
+Original tables:
 
 | Element | `inDRS` |
 |:---|:---|
@@ -475,7 +490,7 @@ The DRSMetadata extension includes a subset of administrative and technical meta
 | Repeatable | No |
 | Contained In | //HarvardDRS:DRSMetadata |
 | Note | The element exists to facilitate searching and faceting. Only `inDRS="true"` is explicit in the metadata. Any record lacking a DRSMetadata extension will be recorded as `inDRS=“false”` in the LibraryCloud Item API, and there will be no DRSMetadata extension in the record. |
-| Example | `<HarvardDRS:inDRS>true</HarvardDRS:inDRS> ` |
+| Example | `<HarvardDRS:inDRS>true</HarvardDRS:inDRS>` |
 
 | Element | `accessFlag` |
 |:---|:---|
@@ -822,9 +837,3 @@ MH:ALMA:
   `
 </li>
 </ol>
-
-## Appendix 3: Archival & JSTOR Diagrams
-
-![archival diagram](images/archival.png)
-
-![JSTOR diagram](images/jstor.png)
