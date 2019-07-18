@@ -13,8 +13,8 @@ _Draft, rev. 2019-06-28_
 
 ## Contents
 
-[TOC]
-
+* [Overview](#Overview)
+  * [Description](#Description)
 
 
 ## Overview
@@ -60,19 +60,19 @@ Note that LibraryCloud is not the database of record for this metadata. The meta
 
 ## Essential Features
 
-## Record Splitting
+### Record Splitting
 <!-- This section is very important; not sure where to put it. -Robin -->
 
 Each incoming record will be transformed into one __or more__ MODS records. A record will be split during this process if it represents more than resource according to specific criteria per contributing source.
 
-### Alma
+#### Alma
 If the incoming record contains more than one DRS URL for deliverable digital content (i.e., not counting a preview URL, such as a thumbnail image), one record will be created with all URLs plus all physical locations AND a separate record will be created for each digital manifestation.
 
 The MODS `recordIdentifier` for each of the split records will concatenate the original Alma record identifier, an underscore, and the URN portion of the DRS URL to the deliverable content.
 
 > [Example](https://api.lib.harvard.edu/v2/items/990088020470203941_HBS.Baker:10771779)
 
-### JSTOR Forum
+#### JSTOR Forum
 If the incoming record contains more than one item (`<display:DR>`), a separate MODS record will be created for each item, each record containing information about the work plus information about one of the items.  There is no record in LibraryCloud for the Work alone or the work with all items.
 
 The MODS `recordIdentifier` for the split records will concatenate the Work record identifier, an underscore, and either 1) the URN portion of the DRS URL to the deliverable content, or 2) the item record identifier, if the item does not reference digital content.
@@ -82,14 +82,14 @@ The MODS `recordIdentifier` for the split records will concatenate the Work reco
 
 > [Example, Case 2](https://api.lib.harvard.edu/v2/items/S19482_olvsurrogate186373)
 
-### ArchivesSpace
+#### ArchivesSpace
 For each finding aid (Encoded Archival Description [EAD] file), a separate MODS record will be created for every described component. No record will be created for the archival resource (aka collection) itself, because that would redundant with the corresponding collection-level cataloging record from Alma. Each component record will inherit key fields from the hierarchy of the finding aid to ensure that the archival object is placed in context.
 
 The MODS `recordIdentifier` for each of the split records will be the component id (Ref ID) of the archival object record.
 
 > [Example](https://api.lib.harvard.edu/v2/items/hou01365c02879)
 
-## Hierarchical Description
+### Hierarchical Description
 MODS consists of 20 top-level elements or element wrappers, all of which are optional and repeatable. Top-level elements may have subelements that, taken together within an instance of a top element, represent a single concept.
 
 One of the MODS elements, `relatedItem`, allows for great flexibility in the way the description of a resource is structured that has implications for applications that consume the metadata.
@@ -134,7 +134,7 @@ Here is [another example](https://api.lib.harvard.edu/v2/items?recordIdentifier=
 | __One Quilt | `<relatedItem type=”constituent”>` |
 | ____Total view of the quilt | `<relatedItem type=”constituent”>` |
 
-## Non-Latin Script Metadata
+### Non-Latin Script Metadata
 Non-Latin script may appear in LibraryCloud records from any source. However, the MODS `altRepGroup` attribute is only used in Alma records to designate paired elements containing corresponding information in transliteration and in vernacular script.
 
 If an `altRepGroup` attribute is present with a value other than “00”, there will be another element with an identical `altRepGroup` value containing a representation of some or all of the element information in a different script (e.g., Arabic).
