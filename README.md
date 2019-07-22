@@ -508,14 +508,14 @@ Note: The value applies to a file in the DRS if the URN in the LibraryCloud reco
 
 An indication of type and structure of the digital object in the DRS.
 ```xml
-<HarvardDRS:contentModel>P</HarvardDRS:contentModel>
+<HarvardDRS:contentModel>STILL IMAGE</HarvardDRS:contentModel>
 ```
 
 #### uriType
 A code for the type of service that will be used to deliver the content to the user.
 
 ```xml
-<HarvardDRS:uriType>P</HarvardDRS:uriType>
+<HarvardDRS:uriType>SDS</HarvardDRS:uriType>
 ```
 
 Note: Delivery service types: FDS (text documents), IDS (images), PDS (page-turned objects), PDS_LIST (list of page-turned objects), SDS (streaming audio), SDS_VIDEO (streaming video)
@@ -527,7 +527,7 @@ The persistent identifier for delivery of the DRS content.
 <HarvardDRS:fileDeliveryURL>https://nrs.harvard.edu/urn-3:FHCL:2789166</HarvardDRS:fileDeliveryURL>
 ```
 
-Note: This URL serves to associate a URL in descriptive record with its corresponding DRS metadata. Despite its name, it does not necessarily correspond to a delivered file. Most often it delivers content in a dedicated viewer or rendering application. |
+Note: This URL serves to associate a URL in descriptive record with its corresponding DRS metadata. Despite its name, it does not necessarily correspond to a delivered file. Most often it delivers content in a dedicated viewer or rendering application.
 
 #### ownerCode
 
