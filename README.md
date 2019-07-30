@@ -3,7 +3,7 @@
 <!-- The below is an example of how the current document MODS Application Profile for LibraryCloud could be rendered in markdown (.md) format. There's a helpful [cheat sheet for markdown syntax here](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).
 GitHub's version of Markdown is [GitHub Flavord Markdown (GFM)](https://github.github.com/gfm/). It allows for tables and other useful display features.
 
-[View on GitHub](https://github.com/joemull/Metadata/blob/master/README.md). -->
+[View on GitHub](https://github.com/joemull/mods-application-profile/blob/master/README.md). -->
 
 ---
 
@@ -109,38 +109,22 @@ Note that LibraryCloud is not the database of record for this metadata. The meta
 
 Each incoming record will be transformed into one __or more__ MODS records. A record will be split during this process if it represents more than resource according to specific criteria per contributing source.
 
-#### Alma
-If the incoming record contains more than one DRS URL for deliverable digital content (i.e., not counting a preview URL, such as a thumbnail image), one record will be created with all URLs plus all physical locations AND a separate record will be created for each digital manifestation.
+| Name | Transformation into MODS | `recordIdentifier` construction | Examples |
+|---|---|---|---|
+| Alma | If the incoming record contains more than one DRS URL for deliverable digital content (i.e., not counting a preview URL, such as a thumbnail image), one record will be created with all URLs plus all physical locations AND a separate record will be created for each digital manifestation. | The MODS recordIdentifier for each of the split records will concatenate the original Alma record identifier, an underscore, and the URN portion of the DRS URL to the deliverable content. | [Alma example record](https://api.lib.harvard.edu/v2/items/990088020470203941_HBS.Baker:10771779) |
+| JSTOR Forum | If the incoming record contains more than one item (`<display:DR>`), a separate MODS record will be created for each item, each record containing information about the work plus information about one of the items.  There is no record in LibraryCloud for the Work alone or the work with all items. | The MODS `recordIdentifier` for the split records will concatenate the Work record identifier, an underscore, and either 1) the URN portion of the DRS URL to the deliverable content, or 2) the item record identifier, if the item does not reference digital content. | [JSTOR Forum example 1](https://api.lib.harvard.edu/v2/items/S19482_urn-3:FHCL:3116579) <br> [JSTOR Forum example 2](https://api.lib.harvard.edu/v2/items/S19482_olvsurrogate186373) |
+| ArchivesSpace | For each finding aid (Encoded Archival Description [EAD] file), a separate MODS record will be created for every described component. No record will be created for the archival resource (aka collection) itself, because that would redundant with the corresponding collection-level cataloging record from Alma. Each component record will inherit key fields from the hierarchy of the finding aid to ensure that the archival object is placed in context. | The MODS `recordIdentifier` for each of the split records will be the component id (Ref ID) of the archival object record. | [ArchivesSpace example record](https://api.lib.harvard.edu/v2/items/hou01365c02879) |
 
-The MODS `recordIdentifier` for each of the split records will concatenate the original Alma record identifier, an underscore, and the URN portion of the DRS URL to the deliverable content.
+<!-- Sadly, the explanation about JSTOR Forum needs even more detail, since prior record identifiers are used for records created before the migration to JSTOR Forum, and JSTOR Forum record identifiers for records created in JSTOR Forum. -Robin -->
 
-> [Example](https://api.lib.harvard.edu/v2/items/990088020470203941_HBS.Baker:10771779)
-
-#### JSTOR Forum
-If the incoming record contains more than one item (`<display:DR>`), a separate MODS record will be created for each item, each record containing information about the work plus information about one of the items.  There is no record in LibraryCloud for the Work alone or the work with all items.
-
-The MODS `recordIdentifier` for the split records will concatenate the Work record identifier, an underscore, and either 1) the URN portion of the DRS URL to the deliverable content, or 2) the item record identifier, if the item does not reference digital content.
-<!-- Sadly, the above needs even more detail, since prior record identifiers are used for records created before the migration to JSTOR Forum, and JSTOR Forum record identifiers for records created in JSTOR Forum. -Robin -->
-
-> [Example, Case 1](https://api.lib.harvard.edu/v2/items/S19482_urn-3:FHCL:3116579)
-
-> [Example, Case 2](https://api.lib.harvard.edu/v2/items/S19482_olvsurrogate186373)
-
-#### ArchivesSpace
-For each finding aid (Encoded Archival Description [EAD] file), a separate MODS record will be created for every described component. No record will be created for the archival resource (aka collection) itself, because that would redundant with the corresponding collection-level cataloging record from Alma. Each component record will inherit key fields from the hierarchy of the finding aid to ensure that the archival object is placed in context.
-
-The MODS `recordIdentifier` for each of the split records will be the component id (Ref ID) of the archival object record.
-
-> [Example](https://api.lib.harvard.edu/v2/items/hou01365c02879)
-
-### Hierarchical Description
+### Hierarchical Description using `relatedItem`
 MODS consists of 20 top-level elements or element wrappers, all of which are optional and repeatable. Top-level elements may have subelements that, taken together within an instance of a top element, represent a single concept.
 
 One of the MODS elements, `relatedItem`, allows for great flexibility in the way the description of a resource is structured that has implications for applications that consume the metadata.
 
-All MODS top-level elements are valid within `relatedItem`. `relatedItem` has many uses, but one is crucial to the aggregation of metadata in LibraryCloud: it enables nested, hierarchical whole/part description.
+All MODS top-level elements are valid within `relatedItem`. `relatedItem` has many uses, but one is crucial to the aggregation of metadata in LibraryCloud: it enables nested, hierarchical whole/part description. __For ArchivesSpace and JSTOR Forum records, `relatedItem` information is necessary to provide context or specificity about the described resource.__
 
-Records from JSTOR Forum and from ArchivesSpace both take advantage of this hierarchical structure, but in different ways. In both cases, the record overall represents one resource (which may be a compound resource, such as a folder of letters that are not individually described) and a larger context for it. However, in ArchivesSpace records, the description moves from narrower to broader, while in JSTOR Forum, the description moves from the broader context to the specific item. __For ArchivesSpace and JSTOR Forum records, `relatedItem` information is necessary to provide context or specificity about the described resource.__
+Records from JSTOR Forum and from ArchivesSpace both take advantage of this hierarchical structure, but in different ways. In both cases, the record overall represents one resource (which may be a compound resource, such as a folder of letters that are not individually described) and a larger context for it. However, in ArchivesSpace records, the description moves from narrower to broader, while in JSTOR Forum, the description moves from the broader context to the specific item.
 
 The `type` and `displayLabel` attributes in the `relatedItem` element indicate the kind of relationship:
 
@@ -529,6 +513,8 @@ The persistent identifier for delivery of the DRS content.
 
 Note: This URL serves to associate a URL in descriptive record with its corresponding DRS metadata. Despite its name, it does not necessarily correspond to a delivered file. Most often it delivers content in a dedicated viewer or rendering application.
 
+__Note that the rest of the section "DRSMetadata" has not yet been formatted into the above table and definition list__
+
 #### ownerCode
 
 | Element | `ownerCode` |
@@ -760,13 +746,15 @@ They may have dedicated exhibit sites, [e.g.](http://curiosity.lib.harvard.edu/w
 MH:ALMA:
 <ol><li> Permalink to the record in HOLLIS:
 
-  `<mods:relatedItem otherType="HOLLIS record">
+```xml
+  <mods:relatedItem otherType="HOLLIS record">
   <mods:location>
   <mods:url>
   https://id.lib.harvard.edu/alma/990000000230203941/catalog
   </mods:url>
   </mods:location>
-  `
+```
+
 </li>
 <li> Unspecified - Link to Finding Aid:
 
