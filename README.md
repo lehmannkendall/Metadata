@@ -470,10 +470,6 @@ The `DRSMetadata` extension includes a subset of administrative and technical me
 | `ownerCodeDisplayName` | None | A text string [is there a public code list?] | Required | No | //HarvardDRS:DRSMetadata |
 | `metsLabel` | None | A text string | Optional | No | //HarvardDRS:DRSMetadata |
 | `lastModificationDate` | None | ISO8601 timestamp in the form `YYYY-MM-DDThh:mm:ss.SSSZ` | Required | No | //HarvardDRS:DRSMetadata |
-|  |  |  |  |  |  |
-|  |  |  |  |  |  |
-|  |  |  |  |  |  |
-
 
 <!-- Add DRSMetadata wrapper -->
 
