@@ -460,7 +460,7 @@ The `DRSMetadata` extension includes a subset of administrative and technical me
 
 
 | Element | Attributes | Content | Obligation | Repeatable | Contained In |
-|---|---|---|---|---|---|
+|:---|:---|:---|:---|:---|:---|
 | `inDRS` | None | `True` | Required | No | //HarvardDRS:DRSMetadata |
 | `accessFlag` | None | Controlled values: `P` (public), `R` (restricted)  | Required | No | //HarvardDRS:DRSMetadata |
 | `contentModel` | None  |  Controlled values: `STILL IMAGE`, `PDS DOCUMENT`, `DOCUMENT`, `AUDIO`, `TEXT`, `PDS DOCUMENT LIST`, `VIDEO` | Required | No | //HarvardDRS:DRSMetadata |
