@@ -3,16 +3,67 @@
 <!-- The below is an example of how the current document MODS Application Profile for LibraryCloud could be rendered in markdown (.md) format. There's a helpful [cheat sheet for markdown syntax here](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet).
 GitHub's version of Markdown is [GitHub Flavord Markdown (GFM)](https://github.github.com/gfm/). It allows for tables and other useful display features.
 
-[View on GitHub](https://github.com/joemull/Metadata/blob/master/README.md). -->
+[View on GitHub](https://github.com/joemull/mods-application-profile/blob/master/README.md). -->
 
 ---
 
 # MODS Application Profile for LibraryCloud
 _Draft, rev. 2019-06-28_
 
+
+## Contents
+
+* [Overview](#Overview)
+  * [Description](#Description)
+  * [Sources and Transformations](#Sources-and-Transformations)
+* [Essential Features](#Essential-Features)
+  * [Record Splitting](#Record-Splitting)
+    * [Alma](#Alma)
+    * [JSTOR Forum](#JSTOR-Forum)
+    * [ArchivesSpace](#ArchivesSpace)
+  * [Heirarchical Description](#Heirarchical-Description)
+  * [Non-Latin Script Metadata](#Non-Latin-Script-Metadata)
+* [Profile by MODS Top-Level Element](#Profile-by-MODS-Top-Level-Element)
+  * [titleInfo](#titleInfo)
+  * [name](#name)
+  * [typeOfResource](#typeOfResource)
+  * [genre](#genre)
+  * [originInfo](#originInfo)
+    * [place](#place)
+    * [Date Elements](#Date-Elements)
+  * [language](#language)
+  * [location](#location)
+    * [physicalLocation](#physicalLocation)
+    * [url](#url)
+  * [physicalDescription](#physicalDescription)
+  * [abstract](#abstract)
+  * [tableOfContents](#tableOfContents)
+  * [targetAudience](#targetAudience)
+  * [part](#part)
+  * [note](#note)
+  * [subject](#subject)
+  * [classification](#classification)
+  * [relatedItem](#relatedItem)
+  * [accessCondition](#accessCondition)
+  * [extension](#extension)
+  * [recordInfo](#recordInfo)
+* [Appendix 1: Mods Extensions](#Appendix-1-MODS-Extensions)
+  * [cdwalite:cultureWrap](#cdwalite-cultureWrap)
+  * [cdwalite:indexingMaterialsTechSet](#cdwalite-indexingMaterialsTechSet)
+  * [cdwalite:styleWrap](#cdwalite-styleWrap)
+  * [DRSMetadata](#DRSMetadata)
+    * [inDRS](#inDRS)
+    * [accessFlag](#accessFlag)
+    * [contentModel](#contentModel)
+* [Appendix 2: relatedItem Examples](#Appendix-2-relatedItem-Examples)
+
 ## Overview
 
+### Description
+
 Harvard’s LibraryCloud service provides API access to descriptive metadata for Harvard Library resources. LibraryCloud metadata is openly available to the public. Anyone can use the API to find, gather, and repurpose the metadata. It also is used within Harvard Library applications--for example, by serving metadata to [Harvard Digital Collections](https://library.harvard.edu/digital-collections) and [CURIOSity Digital Collections](https://curiosity.lib.harvard.edu/)--and it underlies sites and services developed throughout the Harvard community. It also supports Harvard’s partnerships with initiatives such as DPLA. As such, the metadata aims to balance internal and external requirements and expectations.
+
+### Sources and Transformations
 
 LibraryCloud aggregates descriptive metadata from a variety of sources, mainly
 
@@ -21,6 +72,19 @@ LibraryCloud aggregates descriptive metadata from a variety of sources, mainly
 - ArchivesSpace, for archival materials
 
 Each source uses different metadata standards and vocabularies appropriate to its scope and function. To facilitate searching across and reusing the disparate metadata aggregated in LibraryCloud, the source metadata is converted into a common format, [MODS](https://www.loc.gov/standards/mods/).
+
+MODS version 3.6 is the base format of all metadata returned by the LibraryCloud Item API. The [documentation](https://www.loc.gov/standards/mods/mods-outline-3-6.html) of the MODS standard is comprehensive; therefore, this profile focuses on implementation-specific and source-specific aspects of the metadata in LibraryCloud.
+
+There are six sources of descriptive metadata records in LibraryCloud:
+
+| Source Name | Source Code | Number of Records | Source Format | Transformation to MODS |
+|:---|:---|:---|:---|:---|
+| Alma | MH:ALMA | >15,000,000 | MARCXML | A [lightly customized version](https://github.com/harvard-library/librarycloud_ingest/blob/release/1.5.0/src/main/resources/MARC21slim2MODS3-6.xsl) of the Library of Congress MARC-to-MODS stylesheet MARC21slim2MODS3-6.xsl. |
+| ArchivesSpace | MH:OASIS | >2,300,000 | Encoded Archival Description (EAD) | EAD files are converted to individual MODS records for each [archival component](https://github.com/harvard-library/librarycloud_ingest/blob/release/1.5.0/src/main/resources/eadcomponent2mods.xsl). |
+| JSTOR Forum | MH:VIA | >7,000,000 | VIA XML | JSTOR Forum’s SSIO XML is first converted to Harvard’s legacy [VIA format](http://hul.harvard.edu/ois/xml/xsd/via/newvia.xsd), and then [from VIA to MODS](https://github.com/harvard-library/librarycloud_ingest/blob/release/1.5.0/src/main/resources/viacomponent2mods.xsl). Individual MODS records are created for each JSTOR Forum image record, whether or not the image has been digitized. |
+| Iranian Oral History Project | MH:IOHP | ~900 | Custom | [Custom](https://github.com/harvard-library/librarycloud_ingest/blob/master/src/main/resources/mpcol2mods.xsl) |
+| Jacques Burkhardt Scientific Drawings | MH:MCZArtwork | ~1,000 | Custom | [Custom](https://github.com/harvard-library/librarycloud_ingest/blob/master/src/main/resources/mcz2mods.xsl) |
+| Milman Parry Collection of Oral Literature | MH:MHPL | ~1,800 | Custom | [Custom](https://github.com/harvard-library/librarycloud_ingest/blob/master/src/main/resources/iohp2mods.xsl) |
 
 The records undergo other transformations, normalizations, and enrichments to improve their interoperability and usefulness in the aggregated environment:
 
@@ -34,60 +98,33 @@ Note that LibraryCloud is not the database of record for this metadata. The meta
 
 ![librarycloud diagram](images/librarycloud.png)
 
-## MODS (Metadata Object Description Schema)
-MODS version 3.6 is the base format of all metadata returned by the LibraryCloud Item API. The [documentation](https://www.loc.gov/standards/mods/mods-outline-3-6.html) of the MODS standard is comprehensive; therefore, Harvard’s profile will focus on implementation-specific and source-specific aspects of the metadata in LibraryCloud.
+![archival diagram](images/archival.png)
 
-There are six sources of descriptive metadata records in LibraryCloud:
+![JSTOR diagram](images/jstor.png)
 
-| Source Name | Source Code | Number of Records | Source Format | Transformation to MODS |
-|:---|:---|:---|:---|:---|
-| Alma | MH:ALMA | >15,000,000 | MARCXML | A [lightly customized version](https://github.com/harvard-library/librarycloud_ingest/blob/release/1.5.0/src/main/resources/MARC21slim2MODS3-6.xsl) of the Library of Congress MARC-to-MODS stylesheet MARC21slim2MODS3-6.xsl. |
-| ArchivesSpace | MH:OASIS | >2,300,000 | Encoded Archival Description (EAD) | EAD files are converted to individual MODS records for each [archival component](https://github.com/harvard-library/librarycloud_ingest/blob/release/1.5.0/src/main/resources/eadcomponent2mods.xsl). |
-| JSTOR Forum | MH:VIA | >7,000,000 | VIA XML | JSTOR Forum’s SSIO XML is first converted to Harvard’s legacy [VIA format](http://hul.harvard.edu/ois/xml/xsd/via/newvia.xsd), and then [from VIA to MODS](https://github.com/harvard-library/librarycloud_ingest/blob/release/1.5.0/src/main/resources/viacomponent2mods.xsl). Individual MODS records are created for each JSTOR Forum image record, whether or not the image has been digitized. |
-| Iranian Oral History Project | MH:IOHP | ~900 | Custom | [Custom](https://github.com/harvard-library/librarycloud_ingest/blob/master/src/main/resources/mpcol2mods.xsl) |
-| Jacques Burkhardt Scientific Drawings | MH:MCZArtwork | ~1,000 | Custom | [Custom](https://github.com/harvard-library/librarycloud_ingest/blob/master/src/main/resources/mcz2mods.xsl) |
-| Milman Parry Collection of Oral Literature | MH:MHPL | ~1,800 | Custom | [Custom](https://github.com/harvard-library/librarycloud_ingest/blob/master/src/main/resources/iohp2mods.xsl) |
+## Essential Features
 
-## Record Splitting
+### Record Splitting
 <!-- This section is very important; not sure where to put it. -Robin -->
 
 Each incoming record will be transformed into one __or more__ MODS records. A record will be split during this process if it represents more than resource according to specific criteria per contributing source.
 
-### Alma
-If the incoming record contains more than one DRS URL for deliverable digital content (i.e., not counting a preview URL, such as a thumbnail image), one record will be created with all URLs plus all physical locations AND a separate record will be created for each digital manifestation.
+| Name | Transformation into MODS | `recordIdentifier` construction | Examples |
+|---|---|---|---|
+| Alma | If the incoming record contains more than one DRS URL for deliverable digital content (i.e., not counting a preview URL, such as a thumbnail image), one record will be created with all URLs plus all physical locations AND a separate record will be created for each digital manifestation. | The MODS recordIdentifier for each of the split records will concatenate the original Alma record identifier, an underscore, and the URN portion of the DRS URL to the deliverable content. | [Alma example record](https://api.lib.harvard.edu/v2/items/990088020470203941_HBS.Baker:10771779) |
+| JSTOR Forum | If the incoming record contains more than one item (`<display:DR>`), a separate MODS record will be created for each item, each record containing information about the work plus information about one of the items.  There is no record in LibraryCloud for the Work alone or the work with all items. | The MODS `recordIdentifier` for the split records will concatenate the Work record identifier, an underscore, and either 1) the URN portion of the DRS URL to the deliverable content, or 2) the item record identifier, if the item does not reference digital content. | [JSTOR Forum example 1](https://api.lib.harvard.edu/v2/items/S19482_urn-3:FHCL:3116579) <br> [JSTOR Forum example 2](https://api.lib.harvard.edu/v2/items/S19482_olvsurrogate186373) |
+| ArchivesSpace | For each finding aid (Encoded Archival Description [EAD] file), a separate MODS record will be created for every described component. No record will be created for the archival resource (aka collection) itself, because that would redundant with the corresponding collection-level cataloging record from Alma. Each component record will inherit key fields from the hierarchy of the finding aid to ensure that the archival object is placed in context. | The MODS `recordIdentifier` for each of the split records will be the component id (Ref ID) of the archival object record. | [ArchivesSpace example record](https://api.lib.harvard.edu/v2/items/hou01365c02879) |
 
-The MODS `recordIdentifier` for each of the split records will concatenate the original Alma record identifier, an underscore, and the URN portion of the DRS URL to the deliverable content.
+<!-- Sadly, the explanation about JSTOR Forum needs even more detail, since prior record identifiers are used for records created before the migration to JSTOR Forum, and JSTOR Forum record identifiers for records created in JSTOR Forum. -Robin -->
 
-> [Example](https://api.lib.harvard.edu/v2/items/990088020470203941_HBS.Baker:10771779)
-
-### JSTOR Forum
-If the incoming record contains more than one item (`<display:DR>`), a separate MODS record will be created for each item, each record containing information about the work plus information about one of the items.  There is no record in LibraryCloud for the Work alone or the work with all items.
-
-The MODS `recordIdentifier` for the split records will concatenate the Work record identifier, an underscore, and either 1) the URN portion of the DRS URL to the deliverable content, or 2) the item record identifier, if the item does not reference digital content.
-<!-- Sadly, the above needs even more detail, since prior record identifiers are used for records created before the migration to JSTOR Forum, and JSTOR Forum record identifiers for records created in JSTOR Forum. -Robin -->
-
-> [Example, Case 1](https://api.lib.harvard.edu/v2/items/S19482_urn-3:FHCL:3116579)
-
-> [Example, Case 2](https://api.lib.harvard.edu/v2/items/S19482_olvsurrogate186373)
-
-### ArchivesSpace
-For each finding aid (Encoded Archival Description [EAD] file), a separate MODS record will be created for every described component. No record will be created for the archival resource (aka collection) itself, because that would redundant with the corresponding collection-level cataloging record from Alma. Each component record will inherit key fields from the hierarchy of the finding aid to ensure that the archival object is placed in context.
-
-The MODS `recordIdentifier` for each of the split records will be the component id (Ref ID) of the archival object record.
-
-> [Example](https://api.lib.harvard.edu/v2/items/hou01365c02879)
-
-## MODS Structure
-<!--This section is the most unformed/problematic. The special topics really are fundamental; the field-by-field profile less so, to my mind at least. But Normally, I discuss the element usage in the element list below, but our use of the relatedItem hierarchy is so fundamental to understanding the metadata that I wanted to highlight it. I’m sure how to do that effectively, though. - Robin -->
-
+### Hierarchical Description using `relatedItem`
 MODS consists of 20 top-level elements or element wrappers, all of which are optional and repeatable. Top-level elements may have subelements that, taken together within an instance of a top element, represent a single concept.
 
-### Special Topics: Hierarchical Description
 One of the MODS elements, `relatedItem`, allows for great flexibility in the way the description of a resource is structured that has implications for applications that consume the metadata.
 
-All MODS top-level elements are valid within `relatedItem`. `relatedItem` has many uses, but one is crucial to the aggregation of metadata in LibraryCloud: it enables nested, hierarchical whole/part description.
+All MODS top-level elements are valid within `relatedItem`. `relatedItem` has many uses, but one is crucial to the aggregation of metadata in LibraryCloud: it enables nested, hierarchical whole/part description. __For ArchivesSpace and JSTOR Forum records, `relatedItem` information is necessary to provide context or specificity about the described resource.__
 
-Records from JSTOR Forum and from ArchivesSpace both take advantage of this hierarchical structure, but in different ways. In both cases, the record overall represents one resource (which may be a compound resource, such as a folder of letters that are not individually described) and a larger context for it. However, in ArchivesSpace records, the description moves from narrower to broader, while in JSTOR Forum, the description moves from the broader context to the specific item. __For ArchivesSpace and JSTOR Forum records, `relatedItem` information is necessary to provide context or specificity about the described resource.__
+Records from JSTOR Forum and from ArchivesSpace both take advantage of this hierarchical structure, but in different ways. In both cases, the record overall represents one resource (which may be a compound resource, such as a folder of letters that are not individually described) and a larger context for it. However, in ArchivesSpace records, the description moves from narrower to broader, while in JSTOR Forum, the description moves from the broader context to the specific item.
 
 The `type` and `displayLabel` attributes in the `relatedItem` element indicate the kind of relationship:
 
@@ -108,107 +145,6 @@ For example, note the nested uses of `relatedItem` in [this record](https://api.
 | ____Series | `<relatedItem type=”host”>` |
 | ______Collection | `<relatedItem type=”host” displayLabel=”collection”>` |
 
-<!-- ```xml
-<?xml version="1.0" encoding="UTF-8"?>
-<results xmlns="http://api.lib.harvard.edu/v2/item" xmlns:HarvardDRS="http://hul.harvard.edu/ois/xml/ns/HarvardDRS" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:librarycloud="http://hul.harvard.edu/ois/xml/ns/librarycloud" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:sets="http://hul.harvard.edu/ois/xml/ns/sets" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <pagination>
-    <maxPageableSet>100000</maxPageableSet>
-    <numFound>1</numFound>
-    <query>recordIdentifier=hou01365c02879</query>
-    <limit>10</limit>
-    <start>0</start>
-  </pagination>
-  <items>
-    <mods:mods>
-      <mods:titleInfo>
-        <mods:title>Updike, John. Squirrels mating : autograph manuscript and typescripts with autograph manuscript annotations and corrections, 1987.</mods:title>
-      </mods:titleInfo>
-      <mods:originInfo>
-        <mods:dateCreated point="start">1987</mods:dateCreated>
-        <mods:dateCreated point="end">1987</mods:dateCreated>
-        <mods:dateCreated>1987.</mods:dateCreated>
-      </mods:originInfo>
-      <mods:physicalDescription>
-        <mods:extent>1 folders</mods:extent>
-      </mods:physicalDescription>
-      <mods:physicalDescription>
-        <mods:note type="organization">otherlevel</mods:note>
-      </mods:physicalDescription>
-      <mods:identifier>(2705).</mods:identifier>
-      <mods:language>
-        <mods:languageTerm authority="iso639-2b" type="code">und</mods:languageTerm>
-        <mods:languageTerm authority="iso639-2b" type="text">Undefined</mods:languageTerm>
-      </mods:language>
-      <mods:accessCondition>There are no restrictions on physical access to a majority of this material.   A majority of this collection is shelved offsite. Retrieval requires advance notice. Check with Houghton Public Services staff.   Access to items (359) - (387), (780a), (5434), (6889a) and (7392) - (7395) is restricted until 2029 October 1. Consult curatorial staff. No copying including photography of restricted items is allowed.</mods:accessCondition>
-      <mods:relatedItem otherType="HOLLIS for Archival Discovery record">
-        <mods:location>
-          <mods:url>https://id.lib.harvard.edu/ead/c/hou01365c02879/catalog</mods:url>
-        </mods:location>
-      </mods:relatedItem>
-      <mods:recordInfo>
-        <mods:recordChangeDate encoding="iso8601">20190618</mods:recordChangeDate>
-        <mods:recordIdentifier source="MH:OASIS">hou01365c02879</mods:recordIdentifier>
-      </mods:recordInfo>
-      <mods:relatedItem type="host">
-        <mods:titleInfo>
-          <mods:title>F. Poetry</mods:title>
-        </mods:titleInfo>
-        <mods:recordInfo>
-          <mods:recordIdentifier>hou01365c02509</mods:recordIdentifier>
-        </mods:recordInfo>
-        <mods:relatedItem type="host">
-          <mods:titleInfo>
-            <mods:title>I. Compositions</mods:title>
-          </mods:titleInfo>
-          <mods:recordInfo>
-            <mods:recordIdentifier>hou01365c00001</mods:recordIdentifier>
-          </mods:recordInfo>
-          <mods:relatedItem type="host" displayLabel="collection">
-            <mods:location>
-              <mods:physicalLocation valueURI="http://isni.org/isni/0000000121904234" displayLabel="Harvard repository" type="repository">Houghton Library, Harvard University</mods:physicalLocation>
-            </mods:location>
-            <mods:identifier>MS Am 1793</mods:identifier>
-            <mods:titleInfo>
-              <mods:title>John Updike papers</mods:title>
-            </mods:titleInfo>
-            <mods:originInfo>
-              <mods:dateCreated point="start">1940</mods:dateCreated>
-              <mods:dateCreated point="end">2009</mods:dateCreated>
-              <mods:dateCreated>1940-2009</mods:dateCreated>
-            </mods:originInfo>
-            <mods:recordInfo>
-              <mods:recordIdentifier>hou01365</mods:recordIdentifier>
-            </mods:recordInfo>
-            <mods:relatedItem otherType="HOLLIS record">
-              <mods:location>
-                <mods:url>https://id.lib.harvard.edu/alma/990006018390203941/catalog</mods:url>
-              </mods:location>
-            </mods:relatedItem>
-            <mods:relatedItem otherType="Finding Aid">
-              <mods:location>
-                <mods:url>https://id.lib.harvard.edu/ead/hou01365/catalog</mods:url>
-              </mods:location>
-            </mods:relatedItem>
-            <mods:extension>
-              <librarycloud:HarvardRepositories xmlns="http://www.loc.gov/mods/v3">
-                <librarycloud:HarvardRepository>Houghton</librarycloud:HarvardRepository>
-              </librarycloud:HarvardRepositories>
-            </mods:extension>
-          </mods:relatedItem>
-        </mods:relatedItem>
-      </mods:relatedItem>
-      <mods:extension>
-        <librarycloud:librarycloud xmlns="http://www.loc.gov/mods/v3">
-          <librarycloud:originalDocument>https://s3.amazonaws.com/harvard.ead/hou01365.xml</librarycloud:originalDocument>
-          <librarycloud:processingDate>2019-06-18T09:52Z</librarycloud:processingDate>
-        </librarycloud:librarycloud>
-      </mods:extension>
-      <mods:location />
-    </mods:mods>
-  </items>
-</results>
-``` -->
-
 Records from JSTOR Forum, in contrast, start with the broader description of a painting, building, event, etc., and may have 0-2 additional levels of description for a specific view, such as a perspective, a detail, or a verso.
 
 Here is an [example record](https://api.lib.harvard.edu/v2/items?recordIdentifier=W209586_urn-3:VIT.BB:25445424):
@@ -218,152 +154,6 @@ Here is an [example record](https://api.lib.harvard.edu/v2/items?recordIdentifie
 | Painting |  |
 | __X-Ray (detail) | `<relatedItem type=”constituent”>` |
 
-<!-- ```
-<?xml version="1.0" encoding="UTF-8"?>
-<results xmlns="http://api.lib.harvard.edu/v2/item" xmlns:HarvardDRS="http://hul.harvard.edu/ois/xml/ns/HarvardDRS" xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:librarycloud="http://hul.harvard.edu/ois/xml/ns/librarycloud" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:mods="http://www.loc.gov/mods/v3" xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/" xmlns:sets="http://hul.harvard.edu/ois/xml/ns/sets" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
-  <pagination>
-    <maxPageableSet>100000</maxPageableSet>
-    <numFound>1</numFound>
-    <query>recordIdentifier=W209586_urn-3:VIT.BB:25445424</query>
-    <limit>10</limit>
-    <start>0</start>
-  </pagination>
-  <items>
-    <mods:mods xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-6.xsd">
-      <mods:titleInfo>
-        <mods:title>Salvator Mundi</mods:title>
-      </mods:titleInfo>
-      <mods:name>
-        <mods:namePart>Antonello da Messina</mods:namePart>
-        <mods:namePart type="date">ca.1430-1479, Italian</mods:namePart>
-        <mods:role>
-          <mods:roleTerm>creator</mods:roleTerm>
-        </mods:role>
-        <mods:role>
-          <mods:roleTerm>artist</mods:roleTerm>
-        </mods:role>
-      </mods:name>
-      <mods:typeOfResource>still image</mods:typeOfResource>
-      <mods:genre>paintings</mods:genre>
-      <mods:originInfo>
-        <mods:dateOther keyDate="yes">1465</mods:dateOther>
-        <mods:dateCreated point="start">1465</mods:dateCreated>
-        <mods:dateCreated point="end">1465</mods:dateCreated>
-        <mods:dateCreated>1465</mods:dateCreated>
-      </mods:originInfo>
-      <mods:physicalDescription>
-        <mods:extent>38.7 x 29.8 cm.</mods:extent>
-      </mods:physicalDescription>
-      <mods:extension>
-        <cdwalite:cultureWrap xmlns:cdwalite="http://www.getty.edu/research/conducting_research/standards/cdwa/cdwalite" xmlns="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/TR/xlink">
-          <cdwalite:culture>Italian</cdwalite:culture>
-        </cdwalite:cultureWrap>
-      </mods:extension>
-      <mods:location>
-        <mods:physicalLocation type="repository">National Gallery (Great Britain), London, England</mods:physicalLocation>
-        <mods:shelfLocator>673</mods:shelfLocator>
-      </mods:location>
-      <mods:relatedItem type="constituent">
-        <mods:titleInfo>
-          <mods:title>X-Ray (detail)</mods:title>
-        </mods:titleInfo>
-        <mods:name>
-          <mods:namePart>Burroughs, Alan</mods:namePart>
-          <mods:namePart type="date">1897-1965, American</mods:namePart>
-          <mods:role>
-            <mods:roleTerm>creator</mods:roleTerm>
-          </mods:role>
-          <mods:role>
-            <mods:roleTerm>photographer</mods:roleTerm>
-          </mods:role>
-        </mods:name>
-        <mods:name>
-          <mods:namePart>National Gallery</mods:namePart>
-          <mods:namePart type="date">British art museum, London, founded 1824</mods:namePart>
-          <mods:role>
-            <mods:roleTerm>associated name</mods:roleTerm>
-          </mods:role>
-        </mods:name>
-        <mods:typeOfResource>still image</mods:typeOfResource>
-        <mods:physicalDescription>
-          <mods:extent>238 x 285 mm</mods:extent>
-        </mods:physicalDescription>
-        <mods:note>Historical: x-ray photo taken by Alan Burroughs, Fogg Art Museum, September 1927. Inscriptions: owner's stamp on verso.</mods:note>
-        <mods:subject>
-          <mods:topic>stamps (marks)</mods:topic>
-        </mods:subject>
-        <mods:extension>
-          <cdwalite:indexingMaterialsTechSet xmlns:cdwalite="http://www.getty.edu/research/conducting_research/standards/cdwa/cdwalite" xmlns="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/TR/xlink">
-            <cdwalite:termMaterialsTech>gelatin silver prints</cdwalite:termMaterialsTech>
-          </cdwalite:indexingMaterialsTechSet>
-        </mods:extension>
-        <mods:classification>V 41 oversize OV 3</mods:classification>
-        <mods:location>
-          <mods:url displayLabel="Full Image" note="unrestricted" access="raw object">https://nrs.harvard.edu/urn-3:VIT.BB:25445424</mods:url>
-          <mods:url displayLabel="Thumbnail" access="preview">https://nrs.harvard.edu/urn-3:VIT.BB:25445424?width=150&amp;height=150&amp;usethumb=y</mods:url>
-        </mods:location>
-        <mods:location>
-          <mods:physicalLocation displayLabel="Harvard repository" type="repository">Biblioteca Berenson, Fototeca, Villa I Tatti - The Harvard University Center for Italian Renaissance Studies</mods:physicalLocation>
-          <mods:shelfLocator>400089_1</mods:shelfLocator>
-        </mods:location>
-        <mods:accessCondition displayLabel="copyright" type="useAndReproduction">Access Restrictions: This copy is furnished for study purposes only. Written authorization must be obtained for all other uses.</mods:accessCondition>
-        <mods:recordInfo>
-          <mods:recordIdentifier>13022620</mods:recordIdentifier>
-        </mods:recordInfo>
-        <mods:extension>
-          <librarycloud:HarvardRepositories xmlns="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/TR/xlink">
-            <librarycloud:HarvardRepository>Biblioteca Berenson</librarycloud:HarvardRepository>
-          </librarycloud:HarvardRepositories>
-        </mods:extension>
-      </mods:relatedItem>
-      <mods:relatedItem otherType="HOLLIS Images record">
-        <mods:location>
-          <mods:url>https://id.lib.harvard.edu/images/olvwork209586/urn-3:VIT.BB:25445424/catalog</mods:url>
-        </mods:location>
-      </mods:relatedItem>
-      <mods:recordInfo>
-        <mods:recordContentSource authority="marcorg">MH</mods:recordContentSource>
-        <mods:recordContentSource authority="marcorg">MH-VIA</mods:recordContentSource>
-        <mods:recordChangeDate encoding="iso8601">20141227</mods:recordChangeDate>
-        <mods:recordIdentifier source="MH:VIA">W209586_urn-3:VIT.BB:25445424</mods:recordIdentifier>
-        <mods:languageOfCataloging>
-          <mods:languageTerm>eng</mods:languageTerm>
-        </mods:languageOfCataloging>
-      </mods:recordInfo>
-      <mods:language>
-        <mods:languageTerm type="code">zxx</mods:languageTerm>
-        <mods:languageTerm type="text">No linguistic content</mods:languageTerm>
-      </mods:language>
-      <mods:extension>
-        <HarvardDRS:DRSMetadata xmlns="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/TR/xlink">
-          <HarvardDRS:inDRS>true</HarvardDRS:inDRS>
-          <HarvardDRS:accessFlag>P</HarvardDRS:accessFlag>
-          <HarvardDRS:contentModel>STILL IMAGE</HarvardDRS:contentModel>
-          <HarvardDRS:uriType>IDS</HarvardDRS:uriType>
-          <HarvardDRS:fileDeliveryURL>https://nrs.harvard.edu/urn-3:VIT.BB:25445424</HarvardDRS:fileDeliveryURL>
-          <HarvardDRS:ownerCode>VIT.BERE</HarvardDRS:ownerCode>
-          <HarvardDRS:ownerCodeDisplayName>Biblioteca Berenson</HarvardDRS:ownerCodeDisplayName>
-          <HarvardDRS:lastModifiedDate>2016-02-18T16:37:48.316Z</HarvardDRS:lastModifiedDate>
-        </HarvardDRS:DRSMetadata>
-      </mods:extension>
-      <mods:extension>
-        <librarycloud:librarycloud xmlns="http://www.loc.gov/mods/v3" xmlns:xlink="http://www.w3.org/TR/xlink">
-          <librarycloud:availableTo>Everyone</librarycloud:availableTo>
-          <librarycloud:digitalFormats>
-            <librarycloud:digitalFormat>Images</librarycloud:digitalFormat>
-          </librarycloud:digitalFormats>
-          <librarycloud:originalDocument>https://s3.amazonaws.com/via-presto/prod/olvwork209586.xml</librarycloud:originalDocument>
-          <librarycloud:processingDate>2019-06-29T11:51Z</librarycloud:processingDate>
-        </librarycloud:librarycloud>
-      </mods:extension>
-      <mods:location>
-        <mods:url displayLabel="Harvard Digital Collections" access="object in context">https://id.lib.harvard.edu/digital_collections/W209586_urn-3:VIT.BB:25445424</mods:url>
-      </mods:location>
-    </mods:mods>
-  </items>
-</results>
-``` -->
-
 Here is [another example](https://api.lib.harvard.edu/v2/items?recordIdentifier=G80_olvsurrogate307431):
 
 | Element | Relationship |
@@ -372,7 +162,7 @@ Here is [another example](https://api.lib.harvard.edu/v2/items?recordIdentifier=
 | __One Quilt | `<relatedItem type=”constituent”>` |
 | ____Total view of the quilt | `<relatedItem type=”constituent”>` |
 
-### Special Topics: Non-Latin Script Metadata
+### Non-Latin Script Metadata
 Non-Latin script may appear in LibraryCloud records from any source. However, the MODS `altRepGroup` attribute is only used in Alma records to designate paired elements containing corresponding information in transliteration and in vernacular script.
 
 If an `altRepGroup` attribute is present with a value other than “00”, there will be another element with an identical `altRepGroup` value containing a representation of some or all of the element information in a different script (e.g., Arabic).
@@ -406,6 +196,7 @@ Most, but not all, records will include at least one top-level `titleInfo` eleme
 - `type` values: abbreviated, translated, alternative, uniform
 - `otherType` values are not controlled
 - `titleInfo` elements that contain neither `type` nor `otherType` attributes can be considered primary titles
+
 ##### Subelements
 `titleInfo` is a wrapper element
 
@@ -438,8 +229,8 @@ The `genre` element is present in many Alma records, nearly all JSTOR Forum reco
 
 It is not present in ArchivesSpace records, Iranian Oral History, or Milman Parry records.
 
-### originalInfo
-The `originalInfo` element is a wrapper for information about the creation or issuance of the resource.
+### originInfo
+The `originInfo` element is a wrapper for information about the creation or issuance of the resource.
 
 | Subelement | May occur in records from |
 |:---|:---|
@@ -664,114 +455,109 @@ Example:
 </mods:extension>
 ```
 
-### DRSMetadata 
-The DRSMetadata extension includes a subset of administrative and technical metadata copied from the Harvard Digital Repository Service (DRS) to facilitate discovery and use of digital content available from the DRS.
+### DRSMetadata
+The `DRSMetadata` extension includes a subset of administrative and technical metadata copied from the Harvard Digital Repository Service (DRS) to facilitate discovery and use of digital content available from the DRS.
 
-<!-- Add table block for DRSMetadata wrapper -->
+#### DRSMetadata Entailments
+| Element | Attributes | Content | Obligation | Repeatable | Contained In |
+|:---|:---|:---|:---|:---|:---|
+| `inDRS` | None | `True` | Required | No | //HarvardDRS:DRSMetadata |
+| `accessFlag` | None | Controlled values: `P` (public), `R` (restricted)  | Required | No | //HarvardDRS:DRSMetadata |
+| `contentModel` | None  |  Controlled values: `STILL IMAGE`, `PDS DOCUMENT`, `DOCUMENT`, `AUDIO`, `TEXT`, `PDS DOCUMENT LIST`, `VIDEO` | Required | No | //HarvardDRS:DRSMetadata |
+| `uriType` | None | Controlled values: `FDS`, `IDS`, `PDS`, `PDS_LIST`, `SDS`, `SDS_VIDEO` | Optional | No | //HarvardDRS:DRSMetadata |
+| `fileDeliveryUrl` | None |  | Required | No | //HarvardDRS:DRSMetadata |
+| `ownerCode` | None | [is there a public code list?] | Required | No | //HarvardDRS:DRSMetadata |
+| `ownerCodeDisplayName` | None | A text string [is there a public code list?] | Required | No | //HarvardDRS:DRSMetadata |
+| `metsLabel` | None | A text string | Optional | No | //HarvardDRS:DRSMetadata |
+| `lastModificationDate` | None | ISO8601 timestamp in the form `YYYY-MM-DDThh:mm:ss.SSSZ` | Required | No | //HarvardDRS:DRSMetadata |
 
-| Element | `inDRS` |
-|:---|:---|
-| Description | A flag indicating that there is digital content in the DRS associated with this record. |
-| Attributes | None |
-| Content | True | 
-| Obligation | Required |
-| Repeatable | No |
-| Contained In | //HarvardDRS:DRSMetadata |
-| Note | The element exists to facilitate searching and faceting. Only `inDRS="true"` is explicit in the metadata. Any record lacking a DRSMetadata extension will be recorded as `inDRS=“false”` in the LibraryCloud Item API, and there will be no DRSMetadata extension in the record. |
-| Example | `<HarvardDRS:inDRS>true</HarvardDRS:inDRS> ` | 
+<!-- Add DRSMetadata wrapper -->
 
-| Element | `accessFlag` |
-|:---|:---|
-| Description | A code indicating whether the DRS digital content is accessible to the public or is restricted to Harvard affiliates. |
-| Attributes | None |
-| Content | Controlled values: <ul><li>`P` (public)</li><li>`R` (restricted)</li></ul> |
-| Obligation | Required |
-| Repeatable | No |
-| Contained In | //HarvardDRS:DRSMetadata |
-| Note | The value applies to a file in the DRS if the URN in the LibraryCloud record resolves to a specific file.  If the URN resolves to a multifile object, the accessFlag will be the least restrictive accessFlag value associated with any deliverable file in the object.  |
-| Example | `<HarvardDRS:accessFlag>P</HarvardDRS:accessFlag>` | 
+#### inDRS
+A flag indicating that there is digital content in the DRS associated with this record.
 
-| Element | `contentModel` |
-|:---|:---|
-| Description | An indication of type and structure of the digital object in the DRS. |
-| Attributes | None |
-| Content | Controlled values: <ul><li>`STILL IMAGE`</li><li>`PDS DOCUMENT`</li><li>`DOCUMENT`</li><li>`AUDIO`</li><li>`TEXT`</li><li>`PDS DOCUMENT LIST`</li><li>`VIDEO`</li></ul> |
-| Obligation | Required |
-| Repeatable | No |
-| Contained In | //HarvardDRS:DRSMetadata |
-| Note | |
-| Example | `<HarvardDRS:contentModel>P</HarvardDRS:contentModel>` | 
+```xml
+<HarvardDRS:inDRS>true</HarvardDRS:inDRS>
+```
 
-| Element | `uriType` |
-|:---|:---|
-| Description | A code for the type of service that will be used to deliver the content to the user. |
-| Attributes | None |
-| Content | Controlled values: <ul><li>`FDS`</li><li>`IDS`</li><li>`PDS`</li><li>`PDS_LIST`</li><li>`SDS`</li><li>`SDS_VIDEO`</li></ul> |
-| Obligation | Optional |
-| Repeatable | No |
-| Contained In | //HarvardDRS:DRSMetadata |
-| Note | Delivery service types: FDS (text documents), IDS (images), PDS (page-turned objects), PDS_LIST (list of page-turned objects), SDS (streaming audio), (SDS_VIDEO (streaming video) |
-| Example | `<HarvardDRS:uriType>P</HarvardDRS:uriType>` | 
+Note: The element exists to facilitate searching and faceting. Only `inDRS="true"` is explicit in the metadata. Any record lacking a DRSMetadata extension will be recorded as `inDRS=“false”` in the LibraryCloud Item API, and there will be no DRSMetadata extension in the record.
 
-| Element | `fileDeliveryUrl` |
-|:---|:---|
-| Description | The persistent identifier for delivery of the DRS content. |
-| Attributes | None |
-| Content | |
-| Obligation | Required |
-| Repeatable | No |
-| Contained In | //HarvardDRS:DRSMetadata |
-| Note | This URL serves to associate a URL in descriptive record with its corresponding DRS metadata. Despite its name, it does not necessarily correspond to a delivered file. Most often it delivers content in a dedicated viewer or rendering application. |
-| Example | `<HarvardDRS:fileDeliveryURL>https://nrs.harvard.edu/urn-3:FHCL:2789166</HarvardDRS:fileDeliveryURL>` | 
+#### accessFlag
+A code indicating whether the DRS digital content is accessible to the public or is restricted to Harvard affiliates.
 
-| Element | `ownerCode` |
-|:---|:---|
-| Description | A DRS code identifying the Harvard library, archive, or other repository responsible for the digital content. |
-| Attributes | None |
-| Content | [is therer a public code list?] |
-| Obligation | Required |
-| Repeatable | No |
-| Contained In | //HarvardDRS:DRSMetadata |
-| Note | This value is expanded into the human-readable text form of the unit name in the ownerCodeDisplayName element. |
-| Example | `<HarvardDRS:ownerCode>FHCL.HOUGH</HarvardDRS:ownerCode>` | 
+```xml
+<HarvardDRS:accessFlag>P</HarvardDRS:accessFlag>
+```
 
-| Element | `ownerCodeDisplayName` |
-|:---|:---|
-| Description | The DRS name for the Harvard library, archive, or other repository responsible for the digital content. |
-| Attributes | None |
-| Content | A text string [is therer a public code list?] |
-| Obligation | Required |
-| Repeatable | No |
-| Contained In | //HarvardDRS:DRSMetadata |
-| Note | This value corresponds to the code for the unit name in the ownerCode element. |
-| Example | `<HarvardDRS:ownerCodeDisplayName>Houghton Library</HarvardDRS:ownerCodeDisplayName>` | 
+Note: The value applies to a file in the DRS if the URN in the LibraryCloud record resolves to a specific file.  If the URN resolves to a multifile object, the `accessFlag` will be the least restrictive `accessFlag` value associated with any deliverable file in the object.
 
-| Element | `metsLabel` |
-|:---|:---|
-| Description | A descriptive string from the METS object descriptor file in the DRS for identifying an object to a user. |
-| Attributes | None |
-| Content | A text string |
-| Obligation | Optional |
-| Repeatable | No |
-| Contained In | //HarvardDRS:DRSMetadata |
-| Note | |
-| Example | `<HarvardDRS:metsLabel> LN 93. Derviš, Zilić. Ide Tito preko Romanije. Stolac, June 9, 1950. Albert B. Lord Collection. Milman Parry Collection of Oral Literature.</HarvardDRS:metsLabel>` | 
+#### contentModel
 
-| Element | `lastModificationDate` |
-|:---|:---|
-| Description | The date and time of the most recent update to the object in the DRS. |
-| Attributes | None |
-| Content | ISO8601 timestamp in the form YYYY-MM-DDThh:mm:ss.SSSZ |
-| Obligation | Required |
-| Repeatable | No |
-| Contained In | //HarvardDRS:DRSMetadata |
-| Note | |
-| Example | `<HarvardDRS:lastModifiedDate>2015-11-02T15:06:39.404Z</HarvardDRS:lastModifiedDate>` | 
+An indication of type and structure of the digital object in the DRS.
+```xml
+<HarvardDRS:contentModel>STILL IMAGE</HarvardDRS:contentModel>
+```
 
-### librarycloud Extension 
-The librarycloud extension provides alternative, normalized, or user-friendly values to improve searching, faceting, or display, as well as auxiliary and administrative information. 
+#### uriType
+A code for the type of service that will be used to deliver the content to the user.
+
+```xml
+<HarvardDRS:uriType>SDS</HarvardDRS:uriType>
+```
+
+Note: Delivery service types: FDS (text documents), IDS (images), PDS (page-turned objects), PDS_LIST (list of page-turned objects), SDS (streaming audio), SDS_VIDEO (streaming video)
+
+#### fileDeliveryUrl
+The persistent identifier for delivery of the DRS content.
+
+```xml
+<HarvardDRS:fileDeliveryURL>https://nrs.harvard.edu/urn-3:FHCL:2789166</HarvardDRS:fileDeliveryURL>
+```
+
+Note: This URL serves to associate a URL in descriptive record with its corresponding DRS metadata. Despite its name, it does not necessarily correspond to a delivered file. Most often it delivers content in a dedicated viewer or rendering application.
+
+#### ownerCode
+
+A DRS code identifying the Harvard library, archive, or other repository responsible for the digital content.
+
+```xml
+<HarvardDRS:ownerCode>FHCL.HOUGH</HarvardDRS:ownerCode>
+```
+
+Note: This value is expanded into the human-readable text form of the unit name in the ownerCodeDisplayName element.
+
+#### ownerCodeDisplayName
+
+The DRS name for the Harvard library, archive, or other repository responsible for the digital content.
+
+```xml
+<HarvardDRS:ownerCodeDisplayName>Houghton Library</HarvardDRS:ownerCodeDisplayName>
+```
+
+This value corresponds to the code for the unit name in the ownerCode element.
+
+#### metsLabel
+
+A descriptive string from the METS object descriptor file in the DRS for identifying an object to a user.
+
+```xml
+<HarvardDRS:metsLabel> LN 93. Derviš, Zilić. Ide Tito preko Romanije. Stolac, June 9, 1950. Albert B. Lord Collection. Milman Parry Collection of Oral Literature.</HarvardDRS:metsLabel>
+```
+
+#### lastModificationDate
+
+The date and time of the most recent update to the object in the DRS.
+
+```xml
+<HarvardDRS:lastModifiedDate>2015-11-02T15:06:39.404Z</HarvardDRS:lastModifiedDate>
+```
+
+### librarycloud Extension
+The librarycloud extension provides alternative, normalized, or user-friendly values to improve searching, faceting, or display, as well as auxiliary and administrative information.
 
 The elements may occur together in one librarycloud wrapper element in a single mods:extension or split across more than one mods:extension, and they may occur at any level of the hierarchy.
+
+<!-- This section may be more readable if formatted into a single table for details and a list of definitions and examples, like the above section. -->
 
 <!-- Add table block for librarycloud wrapper -->
 
@@ -784,7 +570,7 @@ The elements may occur together in one librarycloud wrapper element in a single 
 | Repeatable | No |
 | Contained In | //librarycloud:librarycloud |
 | Note | availableTo values are derived from HarvardDRS:accessFlag values. <ul><li>accessFlag<code>&#129130;</code>P Everyone</li><li>accessFlag<code>&#129130;</code>R Harvard only</li></ul>  Two types of content may have inaccurate values: <ol><li>Restricted images that have separate thumbnail images deposited in the DRS will appear as “Everyone”</li><li>Restricted Audio content that is accessed through a DRS playlist appears as “Everyone” because the playlist is public, even if the underlying audio files are not. </li></ol>|
-| Example | `<librarycloud:availableTo>Everyone</librarycloud:availableTo>` | 
+| Example | `<librarycloud:availableTo>Everyone</librarycloud:availableTo>` |
 
 | Element | `DigitalFormats` |
 |:---|:---|
@@ -795,7 +581,7 @@ The elements may occur together in one librarycloud wrapper element in a single 
 | Repeatable | No |
 | Contained In | //librarycloud:librarycloud |
 | Note | Most LibraryCloud records will contain no more than one |
-| Example | See under DigitalFormat below. | 
+| Example | See under DigitalFormat below. |
 
 | Element | `DigitalFormat` |
 |:---|:---|
@@ -872,11 +658,11 @@ The elements may occur together in one librarycloud wrapper element in a single 
 | Obligation | Required |
 | Repeatable | No |
 | Contained In | //librarycloud:librarycloud |
-| Note | 
+| Note |
 There is no date in LibraryCloud to represent the first date that a record was loaded. |
 | Example | `<librarycloud:processingDate>2019-04-16T05:49Z</librarycloud:processingDate>` |
 
-### set Extension 
+### set Extension
 The set extension identifies curated collections in which the item is included, specifically collections created and maintained through Harvard’s Collection Builder service.
 
 These sets may be available for OAI-PMH harvesting. See this [link](https://wiki.harvard.edu/confluence/display/LibraryStaffDoc/LibraryCloud+OAI-PMH+Data+Provider).
@@ -892,7 +678,7 @@ They may have dedicated exhibit sites, [e.g.](http://curiosity.lib.harvard.edu/w
 | Repeatable | No |
 | Contained In | //mods:extension |
 | Note | |
-| Example | `<sets:sets> <sets:set> <sets:systemId>57217</sets:systemId> <sets:setName>Women Working, 1800-1930</sets:setName> <sets:setSpec>ww</sets:setSpec> <sets:baseUrl> https://id.lib.harvard.edu/curiosity/women-working-1800-1930/45- </sets:baseUrl> </sets:set> </sets:sets>` | 
+| Example | `<sets:sets> <sets:set> <sets:systemId>57217</sets:systemId> <sets:setName>Women Working, 1800-1930</sets:setName> <sets:setSpec>ww</sets:setSpec> <sets:baseUrl> https://id.lib.harvard.edu/curiosity/women-working-1800-1930/45- </sets:baseUrl> </sets:set> </sets:sets>` |
 
 | Element | `set` |
 |:---|:---|
@@ -903,7 +689,7 @@ They may have dedicated exhibit sites, [e.g.](http://curiosity.lib.harvard.edu/w
 | Repeatable | Yes |
 | Contained In | //sets:sets |
 | Note | |
-| Example | See sets, above. | 
+| Example | See sets, above. |
 
 | Element | `systemId` |
 |:---|:---|
@@ -914,7 +700,7 @@ They may have dedicated exhibit sites, [e.g.](http://curiosity.lib.harvard.edu/w
 | Repeatable | No |
 | Contained In | //sets:set |
 | Note | |
-| Example | `<sets:systemId>57218</sets:systemId>` | 
+| Example | `<sets:systemId>57218</sets:systemId>` |
 
 | Element | `setName` |
 |:---|:---|
@@ -925,7 +711,7 @@ They may have dedicated exhibit sites, [e.g.](http://curiosity.lib.harvard.edu/w
 | Repeatable | No |
 | Contained In | //sets:set |
 | Note | This is the same as the setName in [OAI-PMH](http://www.openarchives.org/OAI/openarchivesprotocol.html) |
-| Example | `<sets:setName>Women Working, 1800-1930</sets:setName>` | 
+| Example | `<sets:setName>Women Working, 1800-1930</sets:setName>` |
 
 | Element | `setSpec` |
 |:---|:---|
@@ -936,7 +722,7 @@ They may have dedicated exhibit sites, [e.g.](http://curiosity.lib.harvard.edu/w
 | Repeatable | No |
 | Contained In | //sets:set |
 | Note | This is the same as the setSpec in [OAI-PMH](http://www.openarchives.org/OAI/openarchivesprotocol.html) |
-| Example | `<sets:setName>Women Working, 1800-1930</sets:setName>` | 
+| Example | `<sets:setName>Women Working, 1800-1930</sets:setName>` |
 
 | Element | `baseUrl` |
 |:---|:---|
@@ -947,87 +733,92 @@ They may have dedicated exhibit sites, [e.g.](http://curiosity.lib.harvard.edu/w
 | Repeatable | No |
 | Contained In | //sets:set |
 | Note | baseUrl will only be present if there is a public exhibit or site for the collection. |
-| Example | `<sets:baseUrl> https://id.lib.harvard.edu/curiosity/women-working-1800-1930/45- </sets:baseUrl>` | 
+| Example | `<sets:baseUrl> https://id.lib.harvard.edu/curiosity/women-working-1800-1930/45- </sets:baseUrl>` |
 
 ## Appendix 2: relatedItem examples
 MH:ALMA:
-<ol><li> Permalink to the record in HOLLIS: 
+<ol><li> Permalink to the record in HOLLIS:
 
-  `<mods:relatedItem otherType="HOLLIS record">
-  <mods:location>
-  <mods:url>
-  https://id.lib.harvard.edu/alma/990000000230203941/catalog 
-  </mods:url>
-  </mods:location>
-  `
+```xml
+  <mods:relatedItem otherType="HOLLIS record">
+    <mods:location>
+      <mods:url>https://id.lib.harvard.edu/alma/990000000230203941/catalog</mods:url>
+    </mods:location>
+```
+
 </li>
-<li> Unspecified - Link to Finding Aid: 
+<li> Unspecified - Link to Finding Aid:
 
-  ` 
+```xml
   <mods:relatedItem>
-  <mods:titleInfo>
-  <mods:title>Electronic finding aid</mods:title>
-  </mods:titleInfo>
-  <mods:location>
-  <mods:url>https://nrs.harvard.edu/urn-3:RAD.SCHL:sch01321 </mods:url>
-  </mods:location>
-  `
+    <mods:titleInfo>
+      <mods:title>Electronic finding aid</mods:title>
+    </mods:titleInfo>
+    <mods:location>
+      <mods:url>https://nrs.harvard.edu/urn-3:RAD.SCHL:sch01321</mods:url>
+    </mods:location>
+````
+
 </li>
 <li> Series titles:
 
-  `<mods:relatedItem type="series">
+```xml
+<mods:relatedItem type="series">
   <mods:titleInfo>
-  <mods:title>Tübinger Beiträge zur Linguistik ; 465</mods:title>
+    <mods:title>Tübinger Beiträge zur Linguistik ; 465</mods:title>
   </mods:titleInfo>
-  `
-</li>
-<li> Other format: 
+```
 
-  `<mods:relatedItem type="otherFormat" displayLabel="Online version:" otherType="Online version:">
+</li>
+<li> Other format:
+
+```xml
+<mods:relatedItem type="otherFormat" displayLabel="Online version:" otherType="Online version:">
   <mods:titleInfo>
-  <mods:title>Reversing the tide</mods:title>
+    <mods:title>Reversing the tide</mods:title>
   </mods:titleInfo>
-  <mods:originInfo>
-  <mods:publisher>Washington, DC : World Bank, 2005</mods:publisher>
-  </mods:originInfo>
+    <mods:originInfo>
+      <mods:publisher>Washington, DC : World Bank, 2005</mods:publisher>
+    </mods:originInfo>
   <mods:identifier type="local">(OCoLC)654737656</mods:identifier>
-  `
+```
+
 </li>
 <li> Constituent part:
 
-  `<mods:relatedItem type="constituent">
+```xml
+<mods:relatedItem type="constituent">
   <mods:titleInfo>
-  <mods:title>Société civile et efficacité de l'aide</mods:title>
+    <mods:title>Société civile et efficacité de l'aide</mods:title>
   </mods:titleInfo>
-  `
+```
+
 </li>
 <li> Larger context / Is Part OF:
 
-  `<mods:relatedItem displayLabel="part of">
-  <mods:titleInfo>
-  <mods:title>
-  Julia Child Additional papers. Folder: Paul Child log book transcription: 6_KC64, HOLLIS collection-level record: 12694681
-  </mods:title>
-  </mods:titleInfo>
-  `
-</li>
-<li> Is Referenced By: 
+```xml
+  <mods:relatedItem displayLabel="part of">
+    <mods:titleInfo>
+      <mods:title>
+      Julia Child Additional papers. Folder: Paul Child log book transcription: 6_KC64, HOLLIS collection-level record: 12694681
+      </mods:title>
+    </mods:titleInfo>
+```
 
-  `<mods:relatedItem type="isReferencedBy">
-  <mods:titleInfo>
-  <mods:title>Pottle, F.A. Boswell,</mods:title>
-  </mods:titleInfo>
-  <mods:part>
-  <mods:detail type="part">
-  <mods:number>91</mods:number>
-  </mods:detail>
-  </mods:part>
-  `
+</li>
+<li> Is Referenced By:
+
+```xml
+  <mods:relatedItem type="isReferencedBy">
+    <mods:titleInfo>
+      <mods:title>Pottle, F.A. Boswell,</mods:title>
+    </mods:titleInfo>
+    <mods:part>
+      <mods:detail type="part">
+        <mods:number>91</mods:number>
+      </mods:detail>
+    </mods:part>
+```
+
 </li>
 </ol>
-
-## Appendix 3: Archival & JSTOR Diagrams
-
-![archival diagram](images/archival.png)
-
-![JSTOR diagram](images/jstor.png)
