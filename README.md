@@ -458,7 +458,7 @@ Example:
 ### DRSMetadata
 The `DRSMetadata` extension includes a subset of administrative and technical metadata copied from the Harvard Digital Repository Service (DRS) to facilitate discovery and use of digital content available from the DRS.
 
-
+#### DRSMetadata Entailments
 | Element | Attributes | Content | Obligation | Repeatable | Contained In |
 |:---|:---|:---|:---|:---|:---|
 | `inDRS` | None | `True` | Required | No | //HarvardDRS:DRSMetadata |
@@ -466,7 +466,14 @@ The `DRSMetadata` extension includes a subset of administrative and technical me
 | `contentModel` | None  |  Controlled values: `STILL IMAGE`, `PDS DOCUMENT`, `DOCUMENT`, `AUDIO`, `TEXT`, `PDS DOCUMENT LIST`, `VIDEO` | Required | No | //HarvardDRS:DRSMetadata |
 | `uriType` | None | Controlled values: `FDS`, `IDS`, `PDS`, `PDS_LIST`, `SDS`, `SDS_VIDEO` | Optional | No | //HarvardDRS:DRSMetadata |
 | `fileDeliveryUrl` | None |  | Required | No | //HarvardDRS:DRSMetadata |
+| `ownerCode` | None | [is there a public code list?] | Required | No | //HarvardDRS:DRSMetadata |
+| `ownerCodeDisplayName` | None | A text string [is there a public code list?] | Required | No | //HarvardDRS:DRSMetadata |
+| `metsLabel` | None | A text string | Optional | No | //HarvardDRS:DRSMetadata |
+| `lastModificationDate` | None | ISO8601 timestamp in the form `YYYY-MM-DDThh:mm:ss.SSSZ` | Required | No | //HarvardDRS:DRSMetadata |
 |  |  |  |  |  |  |
+|  |  |  |  |  |  |
+|  |  |  |  |  |  |
+
 
 <!-- Add DRSMetadata wrapper -->
 
@@ -513,58 +520,48 @@ The persistent identifier for delivery of the DRS content.
 
 Note: This URL serves to associate a URL in descriptive record with its corresponding DRS metadata. Despite its name, it does not necessarily correspond to a delivered file. Most often it delivers content in a dedicated viewer or rendering application.
 
-__Note that the rest of the section "DRSMetadata" has not yet been formatted into the above table and definition list__
-
 #### ownerCode
 
-| Element | `ownerCode` |
-|:---|:---|
-| Description | A DRS code identifying the Harvard library, archive, or other repository responsible for the digital content. |
-| Attributes | None |
-| Content | [is therer a public code list?] |
-| Obligation | Required |
-| Repeatable | No |
-| Contained In | //HarvardDRS:DRSMetadata |
-| Note | This value is expanded into the human-readable text form of the unit name in the ownerCodeDisplayName element. |
-| Example | `<HarvardDRS:ownerCode>FHCL.HOUGH</HarvardDRS:ownerCode>` |
+A DRS code identifying the Harvard library, archive, or other repository responsible for the digital content.
 
-| Element | `ownerCodeDisplayName` |
-|:---|:---|
-| Description | The DRS name for the Harvard library, archive, or other repository responsible for the digital content. |
-| Attributes | None |
-| Content | A text string [is therer a public code list?] |
-| Obligation | Required |
-| Repeatable | No |
-| Contained In | //HarvardDRS:DRSMetadata |
-| Note | This value corresponds to the code for the unit name in the ownerCode element. |
-| Example | `<HarvardDRS:ownerCodeDisplayName>Houghton Library</HarvardDRS:ownerCodeDisplayName>` |
+```xml
+<HarvardDRS:ownerCode>FHCL.HOUGH</HarvardDRS:ownerCode>
+```
 
-| Element | `metsLabel` |
-|:---|:---|
-| Description | A descriptive string from the METS object descriptor file in the DRS for identifying an object to a user. |
-| Attributes | None |
-| Content | A text string |
-| Obligation | Optional |
-| Repeatable | No |
-| Contained In | //HarvardDRS:DRSMetadata |
-| Note | |
-| Example | `<HarvardDRS:metsLabel> LN 93. Derviš, Zilić. Ide Tito preko Romanije. Stolac, June 9, 1950. Albert B. Lord Collection. Milman Parry Collection of Oral Literature.</HarvardDRS:metsLabel>` |
+Note: This value is expanded into the human-readable text form of the unit name in the ownerCodeDisplayName element.
 
-| Element | `lastModificationDate` |
-|:---|:---|
-| Description | The date and time of the most recent update to the object in the DRS. |
-| Attributes | None |
-| Content | ISO8601 timestamp in the form YYYY-MM-DDThh:mm:ss.SSSZ |
-| Obligation | Required |
-| Repeatable | No |
-| Contained In | //HarvardDRS:DRSMetadata |
-| Note | |
-| Example | `<HarvardDRS:lastModifiedDate>2015-11-02T15:06:39.404Z</HarvardDRS:lastModifiedDate>` |
+#### ownerCodeDisplayName
+
+The DRS name for the Harvard library, archive, or other repository responsible for the digital content.
+
+```xml
+<HarvardDRS:ownerCodeDisplayName>Houghton Library</HarvardDRS:ownerCodeDisplayName>
+```
+
+This value corresponds to the code for the unit name in the ownerCode element.
+
+#### metsLabel
+
+A descriptive string from the METS object descriptor file in the DRS for identifying an object to a user.
+
+```xml
+<HarvardDRS:metsLabel> LN 93. Derviš, Zilić. Ide Tito preko Romanije. Stolac, June 9, 1950. Albert B. Lord Collection. Milman Parry Collection of Oral Literature.</HarvardDRS:metsLabel>
+```
+
+#### lastModificationDate
+
+The date and time of the most recent update to the object in the DRS.
+
+```xml
+<HarvardDRS:lastModifiedDate>2015-11-02T15:06:39.404Z</HarvardDRS:lastModifiedDate>
+```
 
 ### librarycloud Extension
 The librarycloud extension provides alternative, normalized, or user-friendly values to improve searching, faceting, or display, as well as auxiliary and administrative information.
 
 The elements may occur together in one librarycloud wrapper element in a single mods:extension or split across more than one mods:extension, and they may occur at any level of the hierarchy.
+
+<!-- This section may be more readable if formatted into a single table for details and a list of definitions and examples, like the above section. -->
 
 <!-- Add table block for librarycloud wrapper -->
 
