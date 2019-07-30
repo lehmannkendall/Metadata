@@ -748,75 +748,84 @@ MH:ALMA:
 
 ```xml
   <mods:relatedItem otherType="HOLLIS record">
-  <mods:location>
-  <mods:url>
-  https://id.lib.harvard.edu/alma/990000000230203941/catalog
-  </mods:url>
-  </mods:location>
+    <mods:location>
+      <mods:url>https://id.lib.harvard.edu/alma/990000000230203941/catalog</mods:url>
+    </mods:location>
 ```
 
 </li>
 <li> Unspecified - Link to Finding Aid:
 
-  `
+```xml
   <mods:relatedItem>
-  <mods:titleInfo>
-  <mods:title>Electronic finding aid</mods:title>
-  </mods:titleInfo>
-  <mods:location>
-  <mods:url>https://nrs.harvard.edu/urn-3:RAD.SCHL:sch01321 </mods:url>
-  </mods:location>
-  `
+    <mods:titleInfo>
+      <mods:title>Electronic finding aid</mods:title>
+    </mods:titleInfo>
+    <mods:location>
+      <mods:url>https://nrs.harvard.edu/urn-3:RAD.SCHL:sch01321</mods:url>
+    </mods:location>
+````
+
 </li>
 <li> Series titles:
 
-  `<mods:relatedItem type="series">
+```xml
+<mods:relatedItem type="series">
   <mods:titleInfo>
-  <mods:title>Tübinger Beiträge zur Linguistik ; 465</mods:title>
+    <mods:title>Tübinger Beiträge zur Linguistik ; 465</mods:title>
   </mods:titleInfo>
-  `
+```
+
 </li>
 <li> Other format:
 
-  `<mods:relatedItem type="otherFormat" displayLabel="Online version:" otherType="Online version:">
+```xml
+<mods:relatedItem type="otherFormat" displayLabel="Online version:" otherType="Online version:">
   <mods:titleInfo>
-  <mods:title>Reversing the tide</mods:title>
+    <mods:title>Reversing the tide</mods:title>
   </mods:titleInfo>
-  <mods:originInfo>
-  <mods:publisher>Washington, DC : World Bank, 2005</mods:publisher>
-  </mods:originInfo>
+    <mods:originInfo>
+      <mods:publisher>Washington, DC : World Bank, 2005</mods:publisher>
+    </mods:originInfo>
   <mods:identifier type="local">(OCoLC)654737656</mods:identifier>
-  `
+```
+
 </li>
 <li> Constituent part:
 
-  `<mods:relatedItem type="constituent">
+```xml
+<mods:relatedItem type="constituent">
   <mods:titleInfo>
-  <mods:title>Société civile et efficacité de l'aide</mods:title>
+    <mods:title>Société civile et efficacité de l'aide</mods:title>
   </mods:titleInfo>
-  `
+```
+
 </li>
 <li> Larger context / Is Part OF:
 
-  `<mods:relatedItem displayLabel="part of">
-  <mods:titleInfo>
-  <mods:title>
-  Julia Child Additional papers. Folder: Paul Child log book transcription: 6_KC64, HOLLIS collection-level record: 12694681
-  </mods:title>
-  </mods:titleInfo>
-  `
+```xml
+  <mods:relatedItem displayLabel="part of">
+    <mods:titleInfo>
+      <mods:title>
+      Julia Child Additional papers. Folder: Paul Child log book transcription: 6_KC64, HOLLIS collection-level record: 12694681
+      </mods:title>
+    </mods:titleInfo>
+```
+
 </li>
 <li> Is Referenced By:
 
-  `<mods:relatedItem type="isReferencedBy">
-  <mods:titleInfo>
-  <mods:title>Pottle, F.A. Boswell,</mods:title>
-  </mods:titleInfo>
-  <mods:part>
-  <mods:detail type="part">
-  <mods:number>91</mods:number>
-  </mods:detail>
-  </mods:part>
-  `
+```xml
+  <mods:relatedItem type="isReferencedBy">
+    <mods:titleInfo>
+      <mods:title>Pottle, F.A. Boswell,</mods:title>
+    </mods:titleInfo>
+    <mods:part>
+      <mods:detail type="part">
+        <mods:number>91</mods:number>
+      </mods:detail>
+    </mods:part>
+```
+
 </li>
 </ol>
